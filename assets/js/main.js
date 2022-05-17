@@ -4,7 +4,7 @@ $( document ).ready(function() {
     var d = new Date();
     var strDate = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
     let prevUrl = document.referrer;
-    if(prevUrl == url || prevUrl == "http://finalproyect.com/main/login"){
+    if(prevUrl == url || prevUrl == "https://finalproyect.com/main/login"){
         eventClouse();
     }
 
@@ -636,13 +636,12 @@ $( document ).ready(function() {
 
      //Show File on HTML
      $(".sh").on("click", function(){
-        var url = $(this).attr("data-url-file");
+        var path = $(this).attr("data-url-file");
         var file = $(this).attr("data-file");
-        var site = $("#val").attr("data-site");
         $.ajax({
             type: "POST",
-            data: {"path": url, "file": file},
-            url: site+"CourseController/ajax_PrintHTML",
+            data: {"path": path, "file": file},
+            url: url+"CourseController/ajax_PrintHTML",
             responseType: "html",
                 success: function(res){
                     $("#showf").html(res);
@@ -653,19 +652,17 @@ $( document ).ready(function() {
     
     //Upload FILE
     $('#file-form').submit(function (ev) {
+        ev.preventDefault();   
         var fd = new FormData();
         var files = $('#newFile')[0].files;
-        var site = $("#valid").attr("data-site");
-        var url = $(this).attr("data-url-file");
-
-        ev.preventDefault();   
+        var path = $(this).attr("data-url-file");
         fd.append('file',files[0]);
-        fd.append('path',url);
+        fd.append('path',path);
 
     // Check file selected or not
         $.ajax({
             type: $('#file-form').attr('method'), 
-            url: site+"CourseController/ajaxUploadFile",
+            url: url+"CourseController/ajaxUploadFile",
             responseType: "json",
             data: fd,
             contentType: false,
@@ -683,14 +680,13 @@ $( document ).ready(function() {
     });
      //DELETE FILE 
      $(".dr").on("click", function(){
-        var url = $(this).attr("data-url-file");
+        var path = $(this).attr("data-url-file");
         var file = $(this).attr("data-file");
-        var site = $("#valid").attr("data-site");
         
         $.ajax({
             type: "POST",
-            data: {"path": url, "file": file},
-            url: site+"CourseController/ajax_delete",
+            data: {"path": path, "file": file},
+            url: url+"CourseController/ajax_delete",
             responseType: "json",
                 success: function(res){
                     if(res.status == "ERROR"){
@@ -735,5 +731,70 @@ $( document ).ready(function() {
                 }
             });
      }
+
+
+     //REPLY A POST
+     $('.reply-post').submit(function (ev) {
+        ev.preventDefault(); 
+        var replay = $(this).attr("data-r");
+        var msg = $("#write-replay-"+replay).val();
+        var course =$("#courseVista").attr("data-id-course");
+
+        if(msg == "" || msg.length < 5){
+            toastr.error('You cannot send an empty message or sort post.');
+            $("#btn-replay").removeAttr("disabled");
+            return false;
+        }
+
+        $.ajax({
+            type: $('.reply-post').attr('method'), 
+            url: url+"CourseController/ajax_write",
+            responseType: "html",
+            data: {"msg": msg, "course_id": course, "replay": replay},
+            }).then(res=>{
+                if(res.status == "ERROR"){
+                    toastr.error('An error has occurred you did not create a post because: '+res.message);
+                } else {                        
+                    toastr.success('New post was created.');
+                    //$("#foroHere").html(res);
+                    $("#write-replay-"+replay).val("");
+                    $("#btn-replay").removeAttr("disabled");
+                    location.reload();// It's necesary to fix problem with the news textarea.
+                }
+        })
+        ev.preventDefault();   
+    });
+
+         //WRITE A POST
+         $('#new-post').submit(function (ev) {
+            $("#btn-new-post").attr("disabled", "disabled");
+            ev.preventDefault();   
+            var msg = $("#write-new-post").val();
+            var course =$("#courseVista").attr("data-id-course");
+
+            if(msg == "" || msg.length < 5){
+                toastr.error('You cannot send an empty message or sort post.');
+                $("#btn-new-post").removeAttr("disabled");
+                return false;
+            }
+
+            $.ajax({
+                type: "POST", 
+                url: url+"CourseController/ajax_write",
+                responseType: "html",
+                data: {"msg": msg, "course_id": course},
+                }).then(res=>{
+                    if(res.status == "ERROR"){
+                        toastr.error('An error has occurred you did not create a post because: '+res.message);
+                    } else {                        
+                        toastr.success('New post was created.');
+                        //$("#foroHere").html(res);
+                        $("#write-new-post").val("");
+                        $("#btn-new-post").removeAttr("disabled");
+                        location.reload();// It's necesary to fix problem with the news textarea.
+                    }
+            })
+        });
+
 
 });

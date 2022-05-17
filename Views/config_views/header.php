@@ -23,8 +23,6 @@
 
     <!-- FULLCALENDAR PLUGIN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css">
-
 </head>
 <body id="page-top">
-    <!-- Page Wrapper -->
-    <div id="wrapper">
+

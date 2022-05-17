@@ -8,8 +8,18 @@
         /**
          * This function render a full view
          */
-        function render($name){
-            require  './Views/'. $name .'.php';
+        function render($data){
+            if(is_array($data)){
+                //Create variables with the values that come to the view 
+                foreach($data as $key => $value){
+                    $$key = $value;
+                }
+              }
+              if(isset($data['view'])){
+                require  './Views/'. $data['view'] .'.php';
+              } else {
+                  require  './Views/'. $data .'.php';
+              }
         }
 
         /**
@@ -39,7 +49,6 @@
                     }
                     if($_SESSION['user']->getFirstTime() != "0000-00-00 00:00:00"){
                         require_once ('./Views/config_views/nav.php');   
-
                     }
                 }
                 if($_GET['url'] != "main/dashboard"){

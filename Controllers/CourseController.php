@@ -13,17 +13,20 @@ Class CourseController extends Controller{
 
     function courseDashboard($hash){
         $this->loadModel("admin");
+        $this->loadModel("courseModel");
         $course = $this->admin->getCourseHash($hash);
         $files = scandir($course->getFolder());
         $realFiles = array();
         $dots = array("..", ".");
+        $forums = $this->courseModel->getFormusByCourse($course->getCourse_id());
+        
 
         foreach($files as $file){
             if(!in_array($file, $dots)){
                 $realFiles[] = $file;
             }
         }
-
+        $data['forums'] = $forums;
         $data['files'] = $realFiles;
         $data['extValid'] = array("jpg", "png", "jpeg", "webp", "pdf", "mp3", "mp4");
         $data['course'] = $course;
@@ -139,6 +142,36 @@ Class CourseController extends Controller{
             echo json_encode($result);
             return false;
         }
+    }
+
+    function ajax_write(){
+        $this->loadModel("courseModel");
+        $msg = $_POST['msg'];
+        $user_id = $_SESSION['user']->getUser_id();
+        $course_id = $_POST['course_id'];
+        $date = date("Y-m-d H:i:s");
+        if(isset($_POST['replay'])){
+            $replay = $_POST['replay'];
+           $returned = $this->courseModel->insertPost($user_id, $msg, $course_id, $date, $replay);
+        } else {
+            $returned =  $this->courseModel->insertPost($user_id, $msg, $course_id, $date);
+        }
+
+        $forum = $this->courseModel->getFormusByCourse($course_id);
+
+        if($returned){
+            $print = $this->printForm($forum);
+            echo $print;
+        } else {
+            $result = array( "status" => "ERROR", "message" => "A error ocurred when you tried create post: "+$returned );
+            echo json_encode($result);
+        }
+    }
+
+    function printForm($forums){
+        $data['view'] = "forum/forum_view";
+        $data['forums'] = $forums;
+        $this->view->render($data);
     }
     
     function ajax_PrintHTML(){

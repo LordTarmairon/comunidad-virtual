@@ -20,7 +20,6 @@
                     return NULL;
                 }
 
-                $query->close();
             } catch(PDOException $e){
                 echo $e->getMessage();
                 return NULL;
@@ -35,8 +34,6 @@
                 } else {
                     return false;
                 }
-
-                $query->close();
             } catch(PDOException $e){
                 echo $e->getMessage();
                 return NULL;

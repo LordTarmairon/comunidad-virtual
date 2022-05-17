@@ -1,11 +1,11 @@
 <?php
 ?>
-<div id="valid" data-site="<?php echo URL;?>" class="container-fluid">
+<div id="a" data-site="<?php echo URL;?>" class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?php echo $course->getName()?> Administration</h1>
     </div>
     <div class="row">
-        <div class=" shadow mb-4">
+        <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Course Info</h6>
             </div>
@@ -47,8 +47,8 @@
                     </table>
                 </div>
                 <caption class="m-auto text-center">
-                    <button data-bs-toggle='modal' data-bs-target="#editCourse" class='btn btn-primary'>Edit Course</button>
-                    <button id='btn-o' class='<?php echo ($course->getOpen() != 0) ? "d-none"  : "";?> btn btn-success'>Open</button><button id='btn-c' class='<?php echo ($course->getOpen() == 0) ? "d-none"  : ""?> btn btn-danger'>Closed</button>
+                    <button data-bs-toggle='modal' data-bs-target="#editCourse" class='btn mt-3 btn-primary'>Edit Course</button>
+                    <button id='btn-o' class='<?php echo ($course->getOpen() != 0) ? "d-none"  : "";?> btn btn-success mt-3'>Open</button><button id='btn-c' class='<?php echo ($course->getOpen() == 0) ? "d-none"  : ""?> btn btn-danger mt-3'>Closed</button>
                 </caption>
             </div>
         </div>
@@ -108,9 +108,7 @@
                     <tbody>
                         <?php 
 
-                    if(is_null($course->getStudents())){
-                        echo "<tr><td colspan='6'class='text-center'> This course don't have Students yet</td></tr>";
-                    } else {
+                    if(!is_null($course->getStudents())){
 
                         foreach($course->getStudents() AS $user){
                             //save the Users Id
@@ -144,6 +142,9 @@
                     <button data-bs-toggle='modal' data-bs-target="#inserFile" class="btn btn-primary">
                         <span class="fa fa-plus-circle" aria-hidden="true"> </span> New File
                     </button>
+                    <a href='<?php echo URL."main/prueba";?>' class="btn btn-success float-right">
+                        <span class="fas fa-video" aria-hidden="true"> </span> Create Meeting
+                    </a>
 
                 </div>
             </div>

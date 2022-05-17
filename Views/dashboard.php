@@ -1,4 +1,4 @@
-        <?php
+<?php
 ?>
         
         <!-- Begin Page Content -->
@@ -15,13 +15,13 @@
             </div>
             
             <!-- Content Row -->
-            <div class="row col-md-12 m-auto d-flex">
+            <div class="row">
                 <!-- Earnings (Monthly) Card Example -->
             <?php 
                 if(!empty($courses) || $courses != null) {
                 foreach($courses AS $course){
                 ?>
-                        <div class="col-xl-3 col-md-4 mb-3">
+                        <div class="col-xl-5 col-md-6 mb-3">
                             <div class="<?php echo ($course->getOpen() == 0) ? "opacity" : ""; ?> card bg-light bg-gradient border-left-primary shadow h-100 py-2 course">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">

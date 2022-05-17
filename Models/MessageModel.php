@@ -169,8 +169,6 @@
                 } else {
                     return NULL;
                 }
-
-                $query->close();
             } catch(PDOException $e){
                 echo $e->getMessage();
                 return NULL;
