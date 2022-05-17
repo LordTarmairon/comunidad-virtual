@@ -103,9 +103,12 @@
 /* END CSS FOR LOGIN */
 
 /*COURSE STYLES*/
-.course:hover, .card:hover{
+.course:hover {
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.53) !important;
 }
 .opacity{
     opacity: 40%;
+}
+.card {
+    padding: 0 !important;
 }

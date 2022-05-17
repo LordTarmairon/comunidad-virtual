@@ -65,6 +65,7 @@
             $userLogin = $_SESSION['user'];
             $courses = array();
             $fCourses = array();
+
             if($userLogin->getFirstTime() == "0000-00-00 00:00:00"){
                 $this->updateStudent();
                 exit();
@@ -72,6 +73,7 @@
 
             $this->loadModel("login");
             $this->loadModel("admin");
+
 
             if($this->infoAdmin()){
                 $courses = $this->admin->getCourses();
@@ -236,16 +238,24 @@
             echo $return;
             return;
         }
-        
+        function prueba(){
+            $data['view'] = "test";
+            $data['breadcrumbs'] = $this->breadcrumbs .= " Update Student /";
+
+            $this->view->view_loader($data);
+        }
 
         function updateStudent($hash = ""){
             $this->loadModel('admin');
 
             if(!empty($hash)){
                 $user = $this->admin->getUserByHash($hash);
-                $data['editAdmin'] = true;
             } else {
                 $user = $_SESSION['user'];
+            }
+            
+            if($this->infoAdTe()){
+                $data['editAdmin'] = true;
             }
 
             $data['breadcrumbs'] = $this->breadcrumbs .= " Update Student /";

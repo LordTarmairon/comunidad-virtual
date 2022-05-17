@@ -17,7 +17,6 @@
                 } else {
                     return false;
                 }
-                $query->close();
             } catch(PDOException $e){
                 echo $e->getMessage();
                 return NULL;
@@ -345,9 +344,13 @@
                     $studentsCourse = $this->coursesUser($course_id);
                     //we create a new array only with the ids
                     $sid = array();
-                    foreach($studentsCourse AS $studentCourse){
-                        array_push($sid, $studentCourse->getUser_id());
+
+                    if(!is_null($studentsCourse)){
+                        foreach($studentsCourse AS $studentCourse){
+                            array_push($sid, $studentCourse->getUser_id());
+                        }
                     }
+
 
                     if(!empty($students)){
                         if(is_array($students)){

@@ -163,7 +163,31 @@ CREATE TABLE IF NOT EXISTS events (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
+CREATE TABLE IF NOT EXISTS forum(
+    id int NOT NULL AUTO_INCREMENT,
+    user_id int NOT NULL,
+    msg text NOT NULL,
+    replay int DEFAULT 0,
+    course_id int NOT NULL,
+    date datetime NOT NULL,
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+
+);
+
 INSERT INTO messages (msg_text, subject, user_send, date) VALUES("Welcome new Admin! This is Virtual Community 1. I hope that you enjoy it. You must not forget that this is a beta and if you discover a new bug report it to the IT department. Thank you. IT Team.", "FIRST STEP", 1, "2022-05-14 07:55:58");
 INSERT INTO user_msg (message_id, user_id, view) VALUES(1,1,0);
 
 
+/**
+ZOOM APLICATION 
+*/
+
+CREATE TABLE `zoom_oauth` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `provider` varchar(255) NOT NULL,
+ `provider_value` text NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
