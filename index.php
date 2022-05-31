@@ -18,7 +18,6 @@
     require_once './Classes/QuestionMultiple.php';
     require_once './Classes/QuestionWritten.php';
     require_once './Classes/Answer.php';
-    require_once "./Classes/FPDF.php";
     require_once './libs/Database.php';
     require_once './libs/Controller.php';
     require_once './libs/Model.php';
