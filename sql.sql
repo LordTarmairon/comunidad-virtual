@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS users(
     photo varchar(100) DEFAULT './assets/img/default.png',
     user_type_id int(10) DEFAULT 1,
     first_time datetime	 NOT NULL DEFAULT 0,
+    open_acount tinyint DEFAULT 0,
     
     PRIMARY KEY (user_id),
     FOREIGN KEY (user_type_id) REFERENCES user_types(type_id)
@@ -46,25 +47,33 @@ CREATE TABLE IF NOT EXISTS info_users(
 );
 
 /*PASS - test123*/
-INSERT INTO users (name, last_name,	passport, email, pass, hash, user_type_id, first_time) VALUES ("Jose Luis", "Calleja Garcia", "PAK925019", "test@test.com", "cc03e747a6afbbcbf8be7668acfebee5", "f14abd86c6bbab6d8642ec9cfec7d71daf46", 2, 1);
+INSERT INTO users (name, last_name,	passport, email, pass, hash, user_type_id, first_time) VALUES ("Jose Luis", "Calleja Garcia", "PAK925019", "test@test.com", "cc03e747a6afbbcbf8be7668acfebee5", "f14abd86c6bbab6d8642ec9cfec7d71daf46", 2, 1, 1);
 
 CREATE TABLE IF NOT EXISTS tests(
 	test_id int NOT NULL AUTO_INCREMENT,
+	hash varchar(100) NOT NULL,
     name varchar(100) NOT NULL,
     description text NOT NULL,
     questions int DEFAULT NULL,
     date_open datetime DEFAULT "0000-00-00 00:00:00",
+    dateClose datetime DEFAULT "0000-00-00 00:00:00",
     time int(100) NOT NULL,
+    open tinyint DEFAULT 0,
+    user_id int NOT NULL,
+    true_count  decimal(5,2) DEFAULT 1,
+    wrong_discount decimal(5,2) DEFAULT 0,
+    random tinyint DEFAULT 0,
     
-    PRIMARY KEY (test_id)
+    PRIMARY KEY (test_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS questions(
 	question_id int NOT NULL AUTO_INCREMENT,
+	title varchar(100) NOT NULL,
     question_text text NOT NULL,
-    test_id int NOT NULL,
-    
-    FOREIGN KEY (test_id) REFERENCES tests (test_id),
+    question_type varchar(100) NOT NULL,
+
     PRIMARY KEY (question_id)
 );
 
@@ -76,6 +85,16 @@ CREATE TABLE IF NOT EXISTS answers(
     
     FOREIGN KEY (question_id) REFERENCES questions (question_id),
     PRIMARY KEY (answer_id)
+);
+
+CREATE TABLE IF NOT EXISTS test_questions(
+      relation_id int NOT NULL AUTO_INCREMENT,
+      test_id int NOT NULL,
+      question_id int NOT NULL,
+
+      FOREIGN KEY (test_id) REFERENCES tests (test_id),
+      FOREIGN KEY (question_id) REFERENCES questions (question_id),
+      PRIMARY KEY (relation_id)
 );
 
 
@@ -122,7 +141,10 @@ CREATE TABLE IF NOT EXISTS user_test (
     test_id int NOT NULL,
     date_start datetime,
     date_end datetime,
-    score float(5,2), 
+    ip_conect varchar(40) NOT NULL,
+    cheats varchar (100),
+    test_serialize blob,
+    score decimal(5,2),
     
     PRIMARY KEY (relation_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id),

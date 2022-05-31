@@ -86,7 +86,6 @@
                 /* Getting file name and change the name for the user Hash*/
                 $filename = $_FILES['file']['name'];
                 $extension = explode(".", $filename);
-                $hash = $hash;
                 $filename =$hash.".".end($extension);
 
                 /* Location */
@@ -140,7 +139,6 @@
                 echo json_encode($result);
                 return false;
             }
-
             $user_id = $_POST['user_id'];
             if($_SESSION['user']->getUser_id() == $user_id){
                 $result = array( "status" => "ERROR", "message" => "You can't delete yourself" );
@@ -155,14 +153,25 @@
                 echo json_encode($result);
                 return false;
             } else {
-                //clean if picture
+                    //clean if picture
                 unlink('./assets/img/usersImg/'.$userD->getHash());
                 $result = array( "status" => "success", "message" =>"Delete Ok" );
                 echo json_encode($result);
                 return true;
             }
         }
-
+        function ajax_openAccount(){
+            $user_id = $_POST['user_id'];
+            $this->loadModel("admin");
+            $user = $this->admin->getUserById($user_id);
+            if($user->openAcount()){
+                $this->admin->updateStatusAccount($user_id, 0);
+            } else {
+                $this->admin->updateStatusAccount($user_id, 1);
+            }
+            $result = array( "status" => "true", "message" => "User account changed" );
+            echo json_encode($result);
+        }
         function coursesManager(){
             $this->loadModel("admin");
 
@@ -351,6 +360,14 @@
         function ajax_newPass(){
             $this->loadModel("admin");
             echo $this->admin->randomPassword();
+        }
+
+        function generatePDF(){
+            $pdf = new FPDF();
+            $pdf->AddPage();
+            $pdf->SetFont('Arial','B',16);
+            $pdf->Cell(40,10,'¡Hola, Mundo!');
+            $pdf->Output();
         }
 
     }

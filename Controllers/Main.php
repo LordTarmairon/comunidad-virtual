@@ -22,6 +22,15 @@
             $userLogin = $this->login->loginUser($email, $pass);
 
             if($userLogin != NULL){
+                //if the user hasn't the acount open redirect.
+                if(!$userLogin->openAcount() && $userLogin->getUser_type_id() != 2 && !isset($_SESSION['user_view'])){
+                    $result = array(
+                        "ResultCode" => "ERROR",
+                        "message" => "Login Error, User with the acount closed!",
+                    );
+                    echo json_encode($result);
+                    return false;
+                }
 
                 $result = array(
                     "ResultCode" => 1,
@@ -65,6 +74,13 @@
             $userLogin = $_SESSION['user'];
             $courses = array();
             $fCourses = array();
+
+            if(!$userLogin->openAcount() && $userLogin->getUser_type_id() != 2 && !isset($_SESSION['user_view'])){
+                session_unset();
+                session_destroy();
+                header("Location:".URL);
+                exit();
+            }
 
             if($userLogin->getFirstTime() == "0000-00-00 00:00:00"){
                 $this->updateStudent();

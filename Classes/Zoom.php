@@ -1,8 +1,8 @@
 <?php
 
 Class Zoom {
-	private $zoom_api_key = "tAD7nYGRTrirK5I-AckCzw";
-	private $zoom_api_secret = "sO3XW3Og4q1IbAPxjNESecffJgfWaDqGnPWr";
+	private $zoom_api_key = CLAVE_API;
+	private $zoom_api_secret = SECRET_API;
 	
 	//function to generate JWT
 	private function generateJWTKey() {

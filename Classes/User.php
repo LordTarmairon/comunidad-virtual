@@ -11,8 +11,9 @@ Class User {
     private $photo;
     private $firstTime;
     private $user_type_id;
+    private $openAcount;
 
-    function __construct($user_id, $name, $last_name, $passport, $email, $pass, $normal_ip, $hash, $photo, $user_type_id, $firstTime){
+    function __construct($user_id, $name, $last_name, $passport, $email, $pass, $normal_ip, $hash, $photo, $user_type_id, $firstTime, $openAcount){
         $this->user_id = $user_id;
         $this->name = $name;
         $this->last_name = $last_name;
@@ -24,6 +25,7 @@ Class User {
         $this->photo = $photo;
         $this->user_type_id = $user_type_id;
         $this->firstTime = $firstTime;
+        $this->openAcount = $openAcount;
     }
 
     // GETTERS AND SETTERS
@@ -95,6 +97,29 @@ Class User {
         return $this->last_name.", ".$this->name;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getOpenAcount()
+    {
+        return $this->openAcount;
+    }
+
+    /**
+     * @param mixed $openAcount
+     */
+    public function setOpenAcount($openAcount)
+    {
+        $this->openAcount = $openAcount;
+    }
+
+    public function openAcount(){
+        if($this->openAcount == 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 ?>

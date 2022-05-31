@@ -1,27 +1,157 @@
 <?php
-Class Test {
+Class Test  extends Core{
     private $id;
+    private $hash;
     private $name;
     private $description;
     private $totalQuestions;
     private $questions = array();
-    private $score;
     private $time;
+    private $dateClose;
+    private $userCreate;
     private $date;
+    private $open;
+    private $true_count;
+    private $wrong_discount;
+    private $random;
+    private $user_test;
 
-    function __construct($id, $name, $description, $totalQuestions, $date, $time,$questions = [], $score = "" ){
+    function __construct($id, $hash, $name, $description, $totalQuestions, $date, $time, $dateClose, $open, $userCreate, $true_count,$wrong_discount, $random, $questions = [], $user_test){
+        parent::__construct();
         $this->id = $id;
+        $this->hash = $hash;
         $this->name = $name;
         $this->description = $description;
         $this->totalQuestions = $totalQuestions;
-        $this->totalQuestions = $questions;
-        $this->score = $score;
+        $this->questions = $questions;
         $this->time = $time;
         $this->date = $date;
-
+        $this->dateClose = $dateClose;
+        $this->open = $open;
+        $this->userCreate = $userCreate;
+        $this->true_count = $true_count;
+        $this->wrong_discount = $wrong_discount;
+        $this->random = $random;
+        $this->user_test = $user_test;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUserTest()
+    {
+        return $this->user_test;
+    }
 
+    /**
+     * @param mixed $user_test
+     */
+    public function setUserTest($user_test): void
+    {
+        $this->user_test = $user_test;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTrueCount()
+    {
+        return $this->true_count;
+    }
+
+    /**
+     * @param mixed $true_count
+     */
+    public function setTrueCount($true_count): void
+    {
+        $this->true_count = $true_count;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWrongDiscount()
+    {
+        return $this->wrong_discount;
+    }
+
+    /**
+     * @param mixed $wrong_discount
+     */
+    public function setWrongDiscount($wrong_discount): void
+    {
+        $this->wrong_discount = $wrong_discount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRandom()
+    {
+        return $this->random;
+    }
+
+    /**
+     * @param mixed $random
+     */
+    public function setRandom($random): void
+    {
+        $this->random = $random;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserCreate()
+    {
+        return $this->userCreate;
+    }
+
+    /**
+     * @param mixed $userCreate
+     */
+    public function setUserCreate($userCreate)
+    {
+        $this->userCreate = $userCreate;
+    }
+    /**
+     * @return mixed
+     */
+    public function getDateClose()
+    {
+        return $this->dateClose;
+    }
+
+    /**
+     * @param mixed $dateClose
+     */
+    public function setDateClose($dateClose)
+    {
+        $this->dateClose = $dateClose;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
+    /**
+     * @return int
+     */
+    public function getOpen()
+    {
+        return $this->open;
+    }
+
+    /**
+     * @param mixed $open
+     */
+    public function setOpen($open)
+    {
+        $this->open = $open;
+    }
     /**
      * Get the value of id
      */ 
@@ -104,6 +234,7 @@ Class Test {
 
     /**
      * Get the value of questions
+     * @return Question
      */ 
     public function getQuestions()
     {
@@ -180,6 +311,12 @@ Class Test {
         $this->date = $date;
 
         return $this;
+    }
+
+
+    public function prueba(){
+        $this->loadModel("login");
+        return $this->login->getUsers();
     }
 }
 
