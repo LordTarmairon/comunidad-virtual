@@ -7,7 +7,6 @@
     define('CHARSET', 'utf8mb4');
     define('BASENOTE', 100);
     date_default_timezone_set("America/Vancouver");
-    define('FPDF_VERSION','1.84');
 
     define('CLAVE_API', 'tAD7nYGRTrirK5I-AckCzw');
     define('SECRET_API', 'sO3XW3Og4q1IbAPxjNESecffJgfWaDqGnPWr');

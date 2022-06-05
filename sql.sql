@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS info_users(
 );
 
 /*PASS - test123*/
-INSERT INTO users (name, last_name,	passport, email, pass, hash, user_type_id, first_time) VALUES ("Jose Luis", "Calleja Garcia", "PAK925019", "test@test.com", "cc03e747a6afbbcbf8be7668acfebee5", "f14abd86c6bbab6d8642ec9cfec7d71daf46", 2, 1, 1);
+INSERT INTO users (name, last_name,	passport, email, pass, hash, user_type_id, first_time, open_acount) VALUES ("Jose Luis", "Calleja Garcia", "PAK925019", "test@test.com", "cc03e747a6afbbcbf8be7668acfebee5", "f14abd86c6bbab6d8642ec9cfec7d71daf46", 2, 1, 1);
 
 CREATE TABLE IF NOT EXISTS tests(
 	test_id int NOT NULL AUTO_INCREMENT,

@@ -11,7 +11,7 @@ if($test->getUserTest()['score'] > $half){
 
 <div class="text-center">
     <h3 class="text-primary"><?php echo $user->fullName()." - ".$test->getName() ?> Review</h3>
-    <h4 class=" font-weight-bold <?php echo $bg ; ?>"><?php echo " Score: ".$test->getUserTest()['score'] ?> </h4>
+    <h4 class=" font-weight-bold <?php echo $bg ; ?>"><?php echo " Score: ".$test->getUserTest()['score']."/".BASENOTE ?> </h4>
 </div>
 
     <div class="card p-4 col-md-10 m-auto">

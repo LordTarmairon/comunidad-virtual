@@ -100,11 +100,7 @@ $(document).ready( function (){
             if (result.isConfirmed) {
                 $("#sent-test-form").submit();
             }
-        })
-
-        window.onbeforeunload = function() {
-            return "If you refresh the page your will lost your oportunity to take the test.";
-        };
+        });
 
     });
 }) // Document Ready

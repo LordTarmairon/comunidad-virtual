@@ -293,12 +293,43 @@ $( document ).ready(function() {
             ev.preventDefault();
     });
 
+    function nif(dni) {
+        var numero
+        var letr
+        var letra
+        var expresion_regular_dni
+
+        expresion_regular_dni = /^\d{8}[a-zA-Z]$/;
+
+        if(expresion_regular_dni.test (dni) == true){
+            numero = dni.substr(0,dni.length-1);
+            letr = dni.substr(dni.length-1,1);
+            numero = numero % 23;
+            letra='TRWAGMYFPDXBNJZSQVHLCKET';
+            letra=letra.substring(numero,numero+1);
+            if (letra!=letr.toUpperCase()) {
+                toastr.error('Wrong DNI, the letter of NIF is not valit');
+                return false;
+            }
+        }else{
+            toastr.error('Wrong DNI, invalid format');
+            return false;
+        }
+        return true;
+    }
+
     //Ajax for Create an User
     $('#create-user').submit(function (ev) {
 
         var fd = new FormData();
         var files = $('#photo')[0].files;
-        ev.preventDefault();   
+        ev.preventDefault();
+
+        if(!nif($("#passport").val())){
+            $("#passport").focus();
+            return false;
+        }
+
         fd.append('file',files[0]);
         fd.append('name',$("#name").val());
         fd.append('last_name',$("#last_name").val());
@@ -306,6 +337,7 @@ $( document ).ready(function() {
         fd.append('typeUser',$("#typeUser").val());
         fd.append('email',$("#email").val());
         fd.append('pass',$("#pass").val());
+
 
         $.ajax({
             type: $('#create-user').attr('method'), 
@@ -331,6 +363,88 @@ $( document ).ready(function() {
                     toastr.success('New User was created.');
                 }
             })
+    });
+
+    //Update Users
+    $('#update-user').submit(function (ev) {
+        var fd = new FormData();
+        var files = $('#photo')[0].files;
+        ev.preventDefault();
+        fd.append('file',files[0]);
+        fd.append('name',$("#name").val());
+        fd.append('last_name',$("#last_name").val());
+        fd.append('passport',$("#passport").val());
+        fd.append('typeUser',$("#typeUser").val());
+        fd.append('email',$("#email").val());
+        fd.append('pass',$("#pass").val());
+        fd.append('hash',$('#update-user').attr('action'));
+
+        // Check file selected or not
+        if($("#c_pass").val() == $("#pass").val() && $("#c_pass").val() != ""){
+            $.ajax({
+                type: $('#update-user').attr('method'),
+                url: url+"main/ajax_updateUser",
+                responseType: "json",
+                data: fd,
+                contentType: false,
+                processData: false,
+            }).then(res=>{
+                res = JSON.parse(res);
+                if(res.status == "ERROR"){
+                    toastr.error('An error has occurred the user has not been inserted because: '+res.message);
+                } else {
+                    toastr.success('New User was created.');
+                    $(location).attr('href',url+"main/dashboard");
+                }
+            })
+            ev.preventDefault();
+        } else {
+            toastr.warning("Password fields are not the same")
+        }
+    });
+
+    $(document).on("click", ".btn-op", function(ev){
+        var url  =  $("#deleteUser").attr("data-url");
+        var id =  $(this).attr("data-id");
+
+        $.ajax({
+            type: "POST",
+            url: url+"adminController/ajax_openAccount",
+            responseType: "json",
+            data: {"user_id": id},
+        }).then(res=>{
+            console.log(res)
+            res = JSON.parse(res);
+            if(res.status == "true"){
+                toastr.success(res.message);
+                $(location).attr('href',url+"adminController/showUsers");
+            } else {
+                toastr.error("An error occurred, the account couldn't status chance");
+                $(location).attr('href',url+"adminController/showUsers");
+            }
+        })
+    });
+
+    var id;
+    $(document).on("click", ".btn-del", function(){
+        id = $(this).attr("data-id");
+    });
+    $(document).on("click", "#yes", function(){
+        var url  =  $("#deleteUser").attr("data-url");
+        $.ajax({
+            type: "POST",
+            url: url+"adminController/ajax_deleteUser",
+            responseType: "json",
+            data: {user_id: id},
+        }).then(res=>{
+            res = JSON.parse(res);
+            if(res.status == "ERROR"){
+                toastr.error(res.message);
+            } else {
+                toastr.success(res.message);
+                $(location).attr('href',url+"adminController/showUsers");
+            }
+        })
     });
 
     //Ajax create a Course
@@ -445,28 +559,6 @@ $( document ).ready(function() {
         }); 
     });
 
-/* it is not working
-    $(document).on("click", "#yes", function(){
-       var url  =  $("#deleteUser").attr("data-url");
-       var id =  $("#deleteUser").attr("data-id");
-
-        $.ajax({
-            type: "POST", 
-            url: url+"adminController/ajax_deleteUser",
-            responseType: "json",
-            data: {"user_id": id},
-            }).then(res=>{
-                console.log(res)
-                res = JSON.parse(res);
-                if(res.status == "ERROR"){
-                    toastr.error(res.message);
-                } else {                        
-                   $(location).attr('href',url+"adminController/showUsers");
-                }
-            })
-    });
-*/
-
     //Create Datatable
     $('#dataTable').DataTable();
     $('#file-table').DataTable();
@@ -486,84 +578,6 @@ $( document ).ready(function() {
             $("#pp-diferent").addClass("d-none");
             $("#pp-true").removeClass("d-none");
         }
-    });
-
-    $('#update-user').submit(function (ev) {
-        var fd = new FormData();
-        var files = $('#photo')[0].files;
-        ev.preventDefault();   
-        fd.append('file',files[0]);
-        fd.append('name',$("#name").val());
-        fd.append('last_name',$("#last_name").val());
-        fd.append('passport',$("#passport").val());
-        fd.append('typeUser',$("#typeUser").val());
-        fd.append('email',$("#email").val());
-        fd.append('pass',$("#pass").val());
-        fd.append('hash',$('#update-user').attr('action'));
-
-        // Check file selected or not
-        if($("#c_pass").val() == $("#pass").val() && $("#c_pass").val() != ""){
-            $.ajax({
-                type: $('#update-user').attr('method'), 
-                url: url+"main/ajax_updateUser",
-                responseType: "json",
-                data: fd,
-                contentType: false,
-                processData: false,
-                }).then(res=>{
-                    res = JSON.parse(res);
-                    if(res.status == "ERROR"){
-                        toastr.error('An error has occurred the user has not been inserted because: '+res.message);
-                    } else {                        
-                        toastr.success('New User was created.');
-                       $(location).attr('href',url+"main/dashboard");
-                    }
-                })
-                ev.preventDefault();   
-        }
-    });
-
-    $(document).on("click", ".btn-op", function(ev){
-       var url  =  $("#deleteUser").attr("data-url");
-       var id =  $(this).attr("data-id");
-
-        $.ajax({
-            type: "POST", 
-            url: url+"adminController/ajax_openAccount",
-            responseType: "json",
-            data: {"user_id": id},
-            }).then(res=>{
-                console.log(res)
-                res = JSON.parse(res);
-                if(res.status == "true"){
-                    toastr.success(res.message);
-                    $(location).attr('href',url+"adminController/showUsers");
-                } else {              
-                    toastr.error("An error occurred, the account couldn't status chance");
-                    $(location).attr('href',url+"adminController/showUsers");
-                }
-            })
-    });
-
-    var id; 
-    $(document).on("click", ".btn-del", function(){
-        id = $(this).attr("data-id");
-    });
-    $(document).on("click", "#yes", function(){
-       var url  =  $("#deleteUser").attr("data-url");
-        $.ajax({
-            type: "POST", 
-            url: url+"adminController/ajax_deleteUser",
-            responseType: "json",
-            data: {user_id: id},
-            }).then(res=>{
-                res = JSON.parse(res);
-                if(res.status == "ERROR"){
-                    toastr.error(res.message);
-                } else {                        
-                   $(location).attr('href',url+"adminController/showUsers");
-                }
-            })
     });
 
     //Ajax Send a Message
@@ -1152,6 +1166,38 @@ $( document ).ready(function() {
                 answerTrue.push($(at).val());
             } else {
                 answerFalse.push($(at).val());
+            }
+        }
+
+        if((question_d == "" || question_d == undefined) && question_type == "written"){
+            toastr.warning("The answer cannot be empty")
+            return false;
+        }
+
+        if(title == ""){
+            toastr.warning("Title cannot be empty.")
+            $("#title").focus()
+            return false;
+        }
+
+        if(description == "" || description == "<br>"){
+            toastr.warning("Description cannot be empty")
+            $(description).focus();
+
+            return false;
+        }
+
+        for (var i = 0; i < answerTrue.length; i++){
+            if(answerTrue[i] == ""){
+                toastr.warning("There can be no empty true answers.")
+                return false;
+            }
+        }
+
+        for (var i = 0; i < answerFalse.length; i++){
+            if(answerFalse[i] == ""){
+                toastr.warning("There can be no empty false answers.")
+                return false;
             }
         }
 

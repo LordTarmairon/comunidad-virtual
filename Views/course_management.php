@@ -41,7 +41,7 @@
                                     } else {
                                         echo "<td> <span class='text-light bg-success pl-2 pr-2  rounded'> Open </span></td>";
                                     }
-                                ?> 
+                                ?>
                             </tr>
                         </tbody>
                     </table>
@@ -96,7 +96,12 @@
                                     } else {
                                         $status = false;
                                     }
-                                    echo ($count != $test->getTotalQuestions()) ? "<tr class='text-black' style='background-color: #e74a3b3d;'>" : $control = true; "<tr>";
+                                    if($count != $test->getTotalQuestions()){
+                                        echo "<tr class='text-black' style='background-color: #e74a3b3d;'>";
+                                    } else {
+                                        $control = true;
+                                        echo "<tr>";
+                                    }
                                     echo "<td>".$test->getName()."</td>";
                                     echo "<td class='text-justify'>".$test->getDescription()."</td>";
                                     echo "<td>".$test->getTotalQuestions()."</td>";
@@ -137,6 +142,39 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class=" card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Teacher Info</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="" class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Passport</th>
+                            <th>Email</th>
+                            <th>Normal IP</th>
+                            <th>User Login</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        echo "<tr>";
+                        echo "<td>".$creator->fullName()."</td>";
+                        echo "<td>".$creator->getPassport()."</td><td>".$creator->getEmail()."</td><td>".$creator->getNormal_ip()."</td>";
+                        echo ($creator->getFirstTime() == "0000-00-00") ? "<td>Not Loggin yet </td>" : "<td>". $creator->getFirstTime() ."</td>";
+                        echo "</tr>";
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row" id="count-questions" data-value="<?php echo $statu; ?>">
         <div class=" card shadow mb-4">
             <div class="card-header py-3">

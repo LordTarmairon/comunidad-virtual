@@ -15,7 +15,7 @@ Class CourseController extends Controller{
         $this->loadModel("admin");
         $this->loadModel("courseModel");
         $course = $this->admin->getCourseHash($hash);
-        if($course->getOpen() == 0){
+        if($course->getOpen() == 0 && !$this->infoAdmin() && $course->getUser_create()->getUser_id() != $_SESSION['user']->getUser_id()){
             header("Location:".URL);
         }
         $files = scandir($course->getFolder());
@@ -62,11 +62,7 @@ Class CourseController extends Controller{
         $data['view'] = "course_management";
         $data['random'] = $this->admin->randomPassword();
         $data['loginZoom'] = "";
-        try{
-        $data['reuniones'] = $this->ajax_list_meetings();
-        } catch (Exception $er){
-            $data['loginZoom'] = "You need doing Login on Zoom for create a meetings.";
-        }
+
 
         $this->view->view_loader($data);
     }

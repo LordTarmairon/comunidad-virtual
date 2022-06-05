@@ -16,10 +16,15 @@
         public function get_access_token() {
             $sql = $this->db->connect()->prepare("SELECT provider_value FROM zoom_oauth WHERE provider = 'zoom'");
             $sql->execute();
-            $result = array();
+            if($sql->rowCount() > 0){
+                $result = array();
                 while($row = $sql->fetch()){
                     $result['provider_value'] = $row['provider_value'];
                 }
+            } else {
+                $result['provider_value'] = "access_token";
+            }
+
             return json_decode($result['provider_value']);
         }
       

@@ -14,7 +14,8 @@
 
         function createTest(){
             $this->loadModel("admin");
-           
+            $this->isAdTe();
+
             $data['view'] = "tests/create_test";
             $data['breadcrumbs'] = $this->breadcrumbs .= " Create a Test /";
             $data['courses'] =  $this->admin->getCourses();
@@ -41,6 +42,8 @@
         function editTest($course_hash, $hash){
             $this->loadModel("admin");
             $this->loadModel("testModel");
+            $this->isAdTe();
+
             $test = $this->testModel->getTestByHash($hash);
             $course = $this->admin->getCourseHash($course_hash);
             $testQuestions = $test->getQuestions();
@@ -53,11 +56,14 @@
             }
 
             $questions = array();
-            foreach ($totalQuestions AS $question){
-                if(!in_array($question->getId(), $idQuestions)){
-                    array_push($questions, $question);
+            if(!is_null($totalQuestions)){
+                foreach ($totalQuestions AS $question){
+                    if(!in_array($question->getId(), $idQuestions)){
+                        array_push($questions, $question);
+                    }
                 }
             }
+
            // $questions =  array_merge($this->testModel->getQuestions(), $test->getQuestions());
           //  $questions = $this->testModel->getQuestions();
             $data['breadcrumbs'] = $this->breadcrumbs .= "<a href='".URL."CourseController/managerCourse/".$course->getHash()."' title='Course management'> ".$course->getName()."</a> "." / ". $test->getName() ." /";
