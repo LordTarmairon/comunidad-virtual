@@ -12,7 +12,6 @@ Class App{
         $url = isset($_GET['url']) ? $_GET['url']: null;
         $url = rtrim($url, '/');
         $url = explode('/', $url);
-        
 
         //Enter without controller or withoud sey the method
         if((empty($url[0]) || $_GET['url'] == "main/login" || $_GET['url'] == "main/")){
@@ -61,7 +60,11 @@ Class App{
                     //We check if a parameter is passed by url
                     if(isset($url[2])){
                         if(isset($url[3])){
-                            $Controller->{$url[1]}($url[2], $url[3]);
+                            if(isset($url[4])){
+                                $Controller->{$url[1]}($url[2], $url[3], $url[4]);
+                            } else {
+                                $Controller->{$url[1]}($url[2], $url[3]);
+                            }
                         }else {
                             $Controller->{$url[1]}($url[2]);
                         }

@@ -30,7 +30,7 @@
 
         }
         .text h1{
-            color: #011718;
+            color: #bdbdbd;
             margin-top: -200px;
             font-size: 15em;
             text-align: center;
@@ -93,7 +93,7 @@
     <div class="text">
     <div class="iamg"></div>
         <h1>401</h1>
-            <h2>You didn't say the magic world!</h2>
+            <h2>You didn't say the magic word!</h2>
         <h3>Sorry Missing Permisions. You shald not pass.</h3>
     </div>
     <div class="torch">

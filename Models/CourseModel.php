@@ -89,9 +89,7 @@ Class CourseModel extends Model{
             } else {
                 return NULL;
             }
-
-            $query->close();
-        } catch(PDOException $e){
+       } catch(PDOException $e){
             echo $e->getMessage();
             return NULL;
         }

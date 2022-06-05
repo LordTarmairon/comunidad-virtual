@@ -22,6 +22,15 @@
             $userLogin = $this->login->loginUser($email, $pass);
 
             if($userLogin != NULL){
+                //if the user hasn't the acount open redirect.
+                if(!$userLogin->openAcount() && $userLogin->getUser_type_id() != 2 && !isset($_SESSION['user_view'])){
+                    $result = array(
+                        "ResultCode" => "ERROR",
+                        "message" => "Login Error, User with the acount closed!",
+                    );
+                    echo json_encode($result);
+                    return false;
+                }
 
                 $result = array(
                     "ResultCode" => 1,
@@ -41,30 +50,20 @@
                     "message" => "Login Error, User or password wrong!",
                 );
                 echo json_encode($result);
+                return false;
             }
-        }
-
-        function getIP(){
-            if (!empty($_SERVER['HTTP_CLIENT_IP']))  
-            {  
-                $ip=$_SERVER['HTTP_CLIENT_IP'];  
-            }  
-            elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))  
-            //to check ip is pass from proxy  
-            {  
-                $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];  
-            }  
-            else  
-            {  
-                $ip=$_SERVER['REMOTE_ADDR'];  
-            }  
-            return $ip;
         }
 
         function dashboard(){
             $userLogin = $_SESSION['user'];
             $courses = array();
             $fCourses = array();
+            if(!$userLogin->openAcount() && $userLogin->getUser_type_id() != 2 && !isset($_SESSION['user_view'])){
+                session_unset();
+                session_destroy();
+                header("Location:".URL);
+                exit();
+            }
 
             if($userLogin->getFirstTime() == "0000-00-00 00:00:00"){
                 $this->updateStudent();
@@ -87,8 +86,6 @@
             }
             //Create a unique array with all of courses that the user have as a student and as a creator
 
-            
-
             if(!is_null($courses)){
                 if(is_null($propietary) || empty($propietary)){
                     $fCourses = $courses;
@@ -102,9 +99,6 @@
                     $fCourses = $propietary;
                 } 
             }
-
-
-
 
             //if user didn't have login redirect.
             if($userLogin != NULL){

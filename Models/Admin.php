@@ -29,7 +29,7 @@
                 $query->execute(array(':hash'=> $hash));
                 if($query->rowCount() > 0){
                     while($row = $query->fetch()){
-                        $user = new User($row['user_id'], $row['name'],$row['last_name'],$row['passport'],$row['email'],$row['pass'],$row['normal_ip'],$row['hash'],$row['photo'],$row['user_type_id'], $row['first_time']);
+                        $user = new User($row['user_id'], $row['name'],$row['last_name'],$row['passport'],$row['email'],$row['pass'],$row['normal_ip'],$row['hash'],$row['photo'],$row['user_type_id'], $row['first_time'], $row['open_acount']);
                     }
                     return $user;
                 } else {
@@ -49,7 +49,7 @@
                 $query->execute(array(':email'=> $email, ':pass' => $pass));
                 if($query->rowCount() > 0){
                     while($row = $query->fetch()){
-                        $user = new User($row['user_id'], $row['name'],$row['last_name'],$row['passport'],$row['email'],$row['pass'],$row['normal_ip'],$row['hash'],$row['photo'],$row['user_type_id'], $row['first_time']);
+                        $user = new User($row['user_id'], $row['name'],$row['last_name'],$row['passport'],$row['email'],$row['pass'],$row['normal_ip'],$row['hash'],$row['photo'],$row['user_type_id'], $row['first_time'], $row['open_acount']);
                     }
                     return $user;
                 } else {
@@ -105,16 +105,13 @@
 
                 if($query->rowCount() > 0){
                     while($row = $query->fetch()){
-                        $user = new User($row['user_id'], $row['name'],$row['last_name'],$row['passport'],$row['email'],$row['pass'],$row['normal_ip'],$row['hash'],$row['photo'],$row['user_type_id'], $row['first_time']);
+                        $user = new User($row['user_id'], $row['name'],$row['last_name'],$row['passport'],$row['email'],$row['pass'],$row['normal_ip'],$row['hash'],$row['photo'],$row['user_type_id'], $row['first_time'], $row['open_acount']);
                         $returnQuery[]= $user;
                     }
-
                     return $returnQuery;
                 } else {
                     return NULL;
                 }
-
-                $query->close();
             } catch(PDOException $e){
                 echo $e->getMessage();
                 return NULL;
@@ -138,7 +135,6 @@
                     return NULL;
                 }
 
-                $query->close();
             } catch(PDOException $e){
                 echo $e->getMessage();
                 return NULL;
@@ -162,7 +158,6 @@
                     return NULL;
                 }
 
-                $query->close();
             } catch(PDOException $e){
                 echo $e->getMessage();
                 return NULL;
@@ -204,6 +199,20 @@
                 }
 
                 $query->close();
+            } catch(PDOException $e){
+                echo $e->getMessage();
+                return NULL;
+            }
+        }
+
+        function updateStatusAccount($user_id, $status){
+            try {
+                $query = $this->db->connect()->prepare("UPDATE users SET open_acount='".$status."' WHERE user_id ='".$user_id."';");
+                if($query->execute()){
+                    return true;
+                } else {
+                    return false;
+                }
             } catch(PDOException $e){
                 echo $e->getMessage();
                 return NULL;
@@ -254,7 +263,7 @@
 
                 if($query->rowCount() > 0){
                     while($row = $query->fetch()){
-                        $test = "test_id";//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                        $test = $this->getTestForCourse($row['course_id']);
                         $students = $this->coursesUser($row['course_id']);
                         $creator = $this->getUserById( $row['user_create']);
                         $course = new Course($row['course_id'], $row['course_name'], $row['course_description'], $row['course_folder'], $creator, $test, $row['course_img'], $row['date_create'], $students, $row['open'], $row['hash']);
@@ -279,7 +288,7 @@
 
                 if($query->rowCount() > 0){
                     while($row = $query->fetch()){
-                        $test = "test_id";//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                        $test = $this->getTestForCourse($row['course_id']);
                         $students = $this->coursesUser($row['course_id']);
                         $creator = $this->getUserById( $row['user_create']);
                         $course = new Course($row['course_id'], $row['course_name'], $row['course_description'], $row['course_folder'], $creator, $test, $row['course_img'], $row['date_create'], $students, $row['open'], $row['hash']);
@@ -305,7 +314,7 @@
 
                 if($query->rowCount() > 0){
                     while($row = $query->fetch()){
-                        $user = new User($row['user_id'], $row['name'],$row['last_name'],$row['passport'],$row['email'],$row['pass'],$row['normal_ip'],$row['hash'],$row['photo'],$row['user_type_id'], $row['first_time']);
+                        $user = new User($row['user_id'], $row['name'],$row['last_name'],$row['passport'],$row['email'],$row['pass'],$row['normal_ip'],$row['hash'],$row['photo'],$row['user_type_id'], $row['first_time'], $row['open_acount']);
                         $returnQuery[]= $user;
                     }
 
@@ -431,7 +440,7 @@
 
                 if($query->rowCount() > 0){
                     while($row = $query->fetch()){
-                        $test = "test_id";//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                        $test = $this->getTestForCourse($row['course_id']);
                         $students = $this->coursesUser($row['course_id']);
                         $creator = $this->getUserById( $row['user_create']);
                         $course = new Course($row['course_id'], $row['course_name'], $row['course_description'], $row['course_folder'], $creator, $test, $row['course_img'], $row['date_create'], $students, $row['open'], $row['hash']);
@@ -457,7 +466,7 @@
                 if($query->rowCount() == 1){
                     
                     while($row = $query->fetch()){
-                        $test = "test_id";//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                        $test = $this->getTestForCourse($row['course_id']);
                         $students = $this->coursesUser($row['course_id']);
                         $creator = $this->getUserById( $row['user_create']);
 
@@ -481,7 +490,7 @@
                 $query->execute(array(":course_id"=>$course_id));
                 if($query->rowCount() == 1){
                     while($row = $query->fetch()){
-                        $test = "";//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                        $test = $this->getTestForCourse($row['course_id']);
                         $students = $this->coursesUser($row['course_id']);
                         $creator = $this->getUserById($row['user_create']);
                         $course = new Course($row['course_id'], $row['course_name'], $row['course_description'], $row['course_folder'], $creator, $test, $row['course_img'], $row['date_create'], $students, $row['open'], $row['hash']);
@@ -503,7 +512,7 @@
                 $query->execute(array(":hash"=>$hash));
                 if($query->rowCount() == 1){
                     while($row = $query->fetch()){
-                        $test = "";//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                        $test = $this->getTestForCourse($row['course_id']);
                         $students = $this->coursesUser($row['course_id']);
                         $creator = $this->getUserById($row['user_create']);
                         $course = new Course($row['course_id'], $row['course_name'], $row['course_description'], $row['course_folder'], $creator, $test, $row['course_img'], $row['date_create'], $students, $row['open'], $row['hash']);

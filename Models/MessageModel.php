@@ -181,7 +181,7 @@
                 $query->execute(array(':id'=> $id));
                 if($query->rowCount() > 0){
                     while($row = $query->fetch()){
-                        $user = new User($row['user_id'], $row['name'],$row['last_name'],$row['passport'],$row['email'],$row['pass'],$row['normal_ip'],$row['hash'],$row['photo'],$row['user_type_id'], $row['first_time']);
+                        $user = new User($row['user_id'], $row['name'],$row['last_name'],$row['passport'],$row['email'],$row['pass'],$row['normal_ip'],$row['hash'],$row['photo'],$row['user_type_id'], $row['first_time'], $row['open_acount']);
                     }
                     return $user;
                 } else {

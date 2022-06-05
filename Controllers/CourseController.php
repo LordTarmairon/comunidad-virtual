@@ -15,12 +15,13 @@ Class CourseController extends Controller{
         $this->loadModel("admin");
         $this->loadModel("courseModel");
         $course = $this->admin->getCourseHash($hash);
+        if($course->getOpen() == 0 && !$this->infoAdmin() && $course->getUser_create()->getUser_id() != $_SESSION['user']->getUser_id()){
+            header("Location:".URL);
+        }
         $files = scandir($course->getFolder());
         $realFiles = array();
         $dots = array("..", ".");
         $forums = $this->courseModel->getFormusByCourse($course->getCourse_id());
-        
-
         foreach($files as $file){
             if(!in_array($file, $dots)){
                 $realFiles[] = $file;
@@ -30,16 +31,21 @@ Class CourseController extends Controller{
         $data['files'] = $realFiles;
         $data['extValid'] = array("jpg", "png", "jpeg", "webp", "pdf", "mp3", "mp4");
         $data['course'] = $course;
-        $data['breadcrumbs'] = $this->breadcrumbs.= "<a href='".URL."adminController/coursesManager'> Courses Manager </a> /" .$course->getName()." /";
+        $data['breadcrumbs'] = $this->breadcrumbs.=  " ". $course->getName()." /";
         $data['view'] = "course_view";
         $this->view->view_loader($data);
     }
 
     function managerCourse($hash){
         $this->isAdTe();
-
         $this->loadModel("admin");
         $course = $this->admin->getCourseHash($hash);
+
+        if($_SESSION['user']->getUser_type_id() == 3 && $_SESSION['user']->getUser_id() != $course->getUser_create()->getUser_id()){
+            header("Location:".URL."/views/errors/401.php");
+            exit();
+        }
+
         $files = scandir($course->getFolder());
         $realFiles = array();
         $dots = array("..", ".");
@@ -54,6 +60,9 @@ Class CourseController extends Controller{
         $data['users'] = $this->admin->getUsers();
         $data['breadcrumbs'] = $this->breadcrumbs.= "<a href='".URL."adminController/coursesManager'> Courses Manager </a> /" .$course->getName()." /";
         $data['view'] = "course_management";
+        $data['random'] = $this->admin->randomPassword();
+        $data['loginZoom'] = "";
+
 
         $this->view->view_loader($data);
     }
@@ -173,7 +182,7 @@ Class CourseController extends Controller{
         $data['forums'] = $forums;
         $this->view->render($data);
     }
-    
+
     function ajax_PrintHTML(){
         $path = $_POST['path'];
         $file = $_POST['file'];

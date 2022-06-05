@@ -245,7 +245,7 @@
     </div>
   </div>
 </div>
-<!-- Modal -->
+<!-- Modal for create a new calendar event-->
 <div class="modal fade" id="editCalendar" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-sm|lg" role="document">
         <div class="modal-content"> 

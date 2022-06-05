@@ -13,8 +13,9 @@
         }
 
         function showUsers(){ 
-            $this->isAdTe();
             $this->loadModel('admin');
+            $this->isAdTe();
+
             $users= $this->admin->getUsers();
             $userTypes = $this->admin->userTypes();
             
@@ -36,6 +37,7 @@
 
         function createStudent(){
             $this->loadModel('admin');
+            $this->isAdTe();
 
             $data['breadcrumbs'] = $this->breadcrumbs .= " Create New Student /";
             $data['view'] = "update-user";
@@ -67,7 +69,7 @@
             }
 
             if(in_array($_POST['passport'], $passtports)){
-                $result = array( "status" => "ERROR", "message" => "MISSING PERMISIONS" );
+                $result = array( "status" => "ERROR", "message" => "The DNI exist on the database" );
                 echo json_encode($result);
                 return false;
             }
@@ -86,7 +88,6 @@
                 /* Getting file name and change the name for the user Hash*/
                 $filename = $_FILES['file']['name'];
                 $extension = explode(".", $filename);
-                $hash = $hash;
                 $filename =$hash.".".end($extension);
 
                 /* Location */
@@ -147,6 +148,7 @@
                 echo json_encode($result);
                 return false;
             }
+
             $userD = $this->admin->getUserById($user_id);
             $status = $this->admin->deleteUser($user_id);
 
@@ -156,15 +158,32 @@
                 return false;
             } else {
                 //clean if picture
-                unlink('./assets/img/usersImg/'.$userD->getHash());
+                if (file_exists($userD->getPhoto())) {
+                    if(strpos($userD->getPhoto(), "default.png") === false){
+                        unlink($userD->getPhoto());
+                    }
+                }
+
                 $result = array( "status" => "success", "message" =>"Delete Ok" );
                 echo json_encode($result);
                 return true;
             }
         }
-
+        function ajax_openAccount(){
+            $user_id = $_POST['user_id'];
+            $this->loadModel("admin");
+            $user = $this->admin->getUserById($user_id);
+            if($user->openAcount()){
+                $this->admin->updateStatusAccount($user_id, 0);
+            } else {
+                $this->admin->updateStatusAccount($user_id, 1);
+            }
+            $result = array( "status" => "true", "message" => "User account changed" );
+            echo json_encode($result);
+        }
         function coursesManager(){
             $this->loadModel("admin");
+            $this->isAdTe();
 
             $data['view'] = "course_manager";
             $data['breadcrumbs'] = $this->breadcrumbs .= " Courses Manager";
@@ -317,15 +336,6 @@
             }
         }
 
-        //file manager
-        function fileManager(){
-
-            $data['view'] = "file_manager";
-            $data['breadcrumbs'] = $this->breadcrumbs .= " File Manager /";
-
-            $this->view->view_loader($data);
-        }
-
         function userView($userHash){
             if(!$this->infoAdTe()){
                 $result = array( "status" => "ERROR", "message" => "MISSING PERMISIONS" );
@@ -351,6 +361,17 @@
         function ajax_newPass(){
             $this->loadModel("admin");
             echo $this->admin->randomPassword();
+        }
+
+        function generatePDF(){
+// Creación del objeto de la clase heredada
+            $pdf = new PDF();
+            $pdf->AliasNbPages();
+            $pdf->AddPage();
+            $pdf->SetFont('Times','',12);
+            for($i=1;$i<=40;$i++)
+                $pdf->Cell(0,10,'Imprimiendo línea número '.$i,0,1);
+            $pdf->Output();
         }
 
     }

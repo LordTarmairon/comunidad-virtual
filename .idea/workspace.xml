@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4aff53bc-0627-4bb2-942e-0dd77359cda9" name="Changes" comment="Update new fixes">
+      <change afterPath="$PROJECT_DIR$/Classes/PDF.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/finalProyect.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/AdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/AdminController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/CourseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/CourseController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Main.php" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/TestController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/TestController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CoursesFolder/7600dfa0c7241e014a3a95db287877f3/header.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CoursesFolder/8d4fd2720f252da2dfc9c01a863fb369/42e42fb12a2a2271699cb824b1c2793e.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CoursesFolder/8d4fd2720f252da2dfc9c01a863fb369/CV_EN2022.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Login.php" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/ZoomModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/Models/ZoomModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/course_management.php" beforeDir="false" afterPath="$PROJECT_DIR$/Views/course_management.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/tests/table_status.php" beforeDir="false" afterPath="$PROJECT_DIR$/Views/tests/table_status.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/tests/test_review.php" beforeDir="false" afterPath="$PROJECT_DIR$/Views/tests/test_review.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/update-user.php" beforeDir="false" afterPath="$PROJECT_DIR$/Views/update-user.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/img/coursesImg/Java_programming_language_logo.svg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/img/coursesImg/css.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/img/coursesImg/javascript_logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/img/usersImg/9f26e0fff699649dd5f34b329455f79e.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/img/usersImg/d0f50100a32fa0c97c1268518ee00b1a.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/img/usersImg/d0f50100a32fa0c97c1268518ee00b1a.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/assets/img/usersImg/d0f50100a32fa0c97c1268518ee00b1a.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/img/usersImg/e4ac1604fe3d61eb22599963ce7eeb6d.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/img/usersImg/f14abd86c6bbab6d8642ec9cfec7d71daf46.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/js/test_scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/test_scripts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/vendor/tempo/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/vendor/tempo/MIT.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/vendor/tempo/README.bower.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/vendor/tempo/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/vendor/tempo/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/vendor/tempo/readme.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql.sql" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="29Gct8P4oX68oEzdHAt15b59b5S" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;17.7.2&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;17.0.38&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Jose/Desktop/TamwoodEnglish/WebDeveloper/Nodes/emma-app/src/components&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Jose\Desktop\TamwoodEnglish\WebDeveloper\Nodes\emma-app\src\components" />
+      <recent name="C:\Users\Jose\Desktop\TamwoodEnglish\WebDeveloper\Third Lessons\ProyectFolder\AJAX\emma" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Jose\Desktop\TamwoodEnglish\WebDeveloper\Third Lessons\finalProyect\Views\tests" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="course_management.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/finalProyect/Views/course_management.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.course_management.php" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4aff53bc-0627-4bb2-942e-0dd77359cda9" name="Changes" comment="" />
+      <created>1652743077139</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1652743077139</updated>
+      <workItem from="1652743079608" duration="1488000" />
+      <workItem from="1652744597132" duration="5459000" />
+      <workItem from="1652750627877" duration="2504000" />
+      <workItem from="1652758494286" duration="603000" />
+      <workItem from="1652759230086" duration="110617000" />
+      <workItem from="1653018188634" duration="475000" />
+      <workItem from="1653023159020" duration="105451000" />
+      <workItem from="1653458684590" duration="31595000" />
+      <workItem from="1654027287407" duration="24964000" />
+      <workItem from="1654123935651" duration="606000" />
+      <workItem from="1654124570425" duration="3450000" />
+      <workItem from="1654129025295" duration="37100000" />
+      <workItem from="1654278640598" duration="397000" />
+      <workItem from="1654286558006" duration="14754000" />
+      <workItem from="1654418962538" duration="1387000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Update new fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update new fixes" />
+  </component>
+</project>

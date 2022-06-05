@@ -9,7 +9,7 @@
         if(!empty($files)){
         foreach($files AS $file){
             $ext = explode(".", $file);
-      ?>      
+        ?>
             <div class=" m-2 card" style="width: 15rem;">
             <img  src="<?php echo (strpos($file, 'jpg') ||strpos($file, 'png') || strpos($file, 'jpeg') || strpos($file, 'webp')) ? URL. $course->getFolder() .'/'.$file : URL.$course->getImg();?>" class="card-img-top m-auto pt-3 w-50" alt="...">
             <div class="card-body">
@@ -22,7 +22,7 @@
                 <?php
                     if(in_array($ext[1], $extValid)){
                 ?>
-                        <span  title="View File" class="btn m-auto btn-warning btn-lg col-md-5 sh" data-file="<?php echo $file ?>" data-url-file="<?php echo $course->getFolder() .'/'.$file?>" data-toggle="modal" data-target="#showFile">
+                        <span  title="View File" class="btn m-auto btn-info btn-lg col-md-5 sh" data-file="<?php echo $file ?>" data-url-file="<?php echo $course->getFolder() .'/'.$file?>" data-toggle="modal" data-target="#showFile">
                                 <span class="fa fa-eye"></span>
                         </span>
                 <?php } ?>
@@ -31,12 +31,98 @@
         </div>
     <?php
         }
-    } else {
+
+    }
+        if(!empty($course->getTests())){
+            foreach($course->getTests() AS $test){
+                if($test->getDate() <= date("Y-m-d H:i:s") && $test->getDateClose() >= date("Y-m-d H:i:s") && $test->getOpen() == 1){
+                    //if((!is_null($test->getUserTest()['date_start']) || !empty($test->getUserTest()['date_start']))  || ( !empty($test->getUserTest()['score'])|| !is_null($test->getUserTest()['score'])) ){
+                    if($test->getUserTest() != false){
+                        ?>
+                        <div class=" m-2 card border-2" style="width: 15rem;">
+                            <img  src="<?php echo URL."assets/img/testImg.png" ?>" class="card-img-top m-auto pt-3 w-50" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo "Test: ". $test->getName() ?></h5>
+                                <p class="card-text"><?php echo "See the test result" ?></p>
+                                <p class="card-text te"><?php echo "You finished it at: <b>".$test->getUserTest()['date_end'];?></b></p>
+                                <div class="row">
+                                    <a title="Download file"  href="<?php echo URL."TestController/viewResult/".$test->getHash()."/".$_SESSION['user']->getHash()."/".$course->getHash()?>" class="btn btn-primary btn-lg m-auto col-md-5 dw">
+                                        Result
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    } else {
+                        ?>
+                        <div class=" m-2 card border-danger shadow-lg border-2" style="width: 15rem;">
+                            <img  src="<?php echo URL."assets/img/testImg.png" ?>" class="card-img-top m-auto pt-3 w-50" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo "Test: ". $test->getName() ?></h5>
+                                <p class="card-text"><?php echo "Time for the Test: <b>".$test->getTime()." Mins </b>" ?></p>
+                                <p class="card-text te"><?php echo "Closed: <b>".$test->getDateClose();?></b></p>
+                                <div class="row">
+                                    <a title="Download file"  href="<?php echo URL. "TestController/preTest/".$course->getHash()."/".$test->getHash()?>" class="btn btn-success btn-lg  m-auto col-md-5 dw">
+                                        Start
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                } elseif($test->getOpen() == 0){
+                    ?>
+                    <div class=" m-2 card bg-light border-2" style="width: 15rem; opacity: 30%;">
+                        <img  src="<?php echo URL."assets/img/testImg.png" ?>" class="card-img-top m-auto pt-3 w-50" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo "Test: ". $test->getName() ?></h5>
+                            <p class="card-text"><?php echo "Time for the Test: <b>".$test->getTime()." Mins </b>" ?></p>
+                            <p class="card-text te"><?php echo "Closed: <b>".$test->getDateClose();?></b></p>
+                            <div class="row">
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
+
+                elseif ($test->getDateClose() < date("Y-m-d H:i:s")){
+                    if($test->getUserTest() == false){
+                    ?>
+                    <div class=" m-2 card border-2" style="width: 15rem; opacity: 50%;">
+                        <img  src="<?php echo URL."assets/img/testImg.png" ?>" class="card-img-top m-auto pt-3 w-50" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo "Test: ". $test->getName() ?></h5>
+                            <p class="card-text bg-gradient-warning">You didn't take the Test.</p>
+                            <p class="card-text te"><?php echo "Closed: <b>".$test->getDateClose();?></b></p>
+                        </div>
+                    </div>
+                    <?php
+                    } else {
+                        ?>
+                        <div class=" m-2 card border-2" style="width: 15rem;">
+                            <img  src="<?php echo URL."assets/img/testImg.png" ?>" class="card-img-top m-auto pt-3 w-50" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo "Test: ". $test->getName() ?></h5>
+                                <p class="card-text"><?php echo "See the test result" ?></p>
+                                <p class="card-text te"><?php echo "You finished it at: <b>".$test->getUserTest()['date_end'];?></b></p>
+                                <div class="row">
+                                    <a title="Download file"  href="<?php echo URL."TestController/viewResult/".$test->getHash()."/".$_SESSION['user']->getHash()."/".$course->getHash()?>" class="btn btn-primary btn-lg m-auto col-md-5 dw">
+                                        Result
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                }
+            }
+        }
+
+        if(empty($course->getTests()) && empty($files)){
         echo "<div class='m-auto p-5'>";
         echo "<h1 class='text-center'> This Course is Empty.</h1>";
         echo "<h5 class='text-center m-auto'>Talk with your teacher if you think that you have an error.</h5>";
         echo "</div>";
-
     }
     ?>
 </div>
@@ -144,7 +230,7 @@ foreach($forums AS $foro){
       <div class="col-md-12">
           <form action="" method="POST" id="new-post">
               <div class="row m-auto d-flex align-items-center text-center">
-                      <div class="col-md-2"><img width="50" height="50" class="img-profile rounded-circle" src="<?php echo URL.$_SESSION['user']->getPhoto();?>" alt="avatar 3" style="width: 40px; height: 100%;"></div>
+                      <div class="col-md-2"><img width="50" height="50" class="img-profile rounded-circle" src="<?php echo URL.$_SESSION['user']->getPhoto();?>" alt="avatar 3"></div>
                       <div class="d-flex flex-column col-md-8 mt-2 mb-2">
                         <textarea class="ml-2 form-control form-control-lg" id="write-new-post" placeholder="Type message"></textarea>
                       </div>

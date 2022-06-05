@@ -112,3 +112,14 @@
 .card {
     padding: 0 !important;
 }
+
+.btn-true-value:hover{
+    cursor: -webkit-pointer;
+    cursor: pointer;
+}
+
+#helperShow{
+    top:5px;
+    position: fixed;
+    z-index: 10;
+}
