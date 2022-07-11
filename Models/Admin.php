@@ -4,19 +4,28 @@
             parent::__construct();
         }
 
-        function newUser($name, $last_name, $passport, $email, $pass, $hash, $photo, $typeUser){
+        function newUser($name, $last_name, $passport, $email, $pass, $hash, $photo, $typeUser, $date = ''){
             if(!$this->noDupliUser($email)){
                 return "User with email: $email exist.";
             }
 
             try{
-                $query = $this->db->connect()->prepare("INSERT INTO users (name, last_name, passport, email, pass, hash, photo, user_type_id) VALUES(:name, :last_name, :passport, :email, :pass, :hash, :photo, :typeUser)");
-                if($query->execute(array(':name'=>$name, ':last_name'=>$last_name, ':passport'=>$passport, ':email'=>$email, ':pass'=>$pass, ':hash'=>$hash, ':photo'=> $photo, ':typeUser'=>$typeUser)) == true){
-                    
-                    return true;
+                if($date != ""){
+                    $query = $this->db->connect()->prepare("INSERT INTO users (name, last_name, passport, email, pass, hash, photo, user_type_id, first_time, open_acount) VALUES(:name, :last_name, :passport, :email, :pass, :hash, :photo, :typeUser, :first_time, :open)");
+                    if($query->execute(array(':name'=>$name, ':last_name'=>$last_name, ':passport'=>$passport, ':email'=>$email, ':pass'=>$pass, ':hash'=>$hash, ':photo'=> $photo, ':typeUser'=>$typeUser, ":first_time"=>$date, ":open"=> 1)) == true){
+                        return true;
+                    } else {
+                        return false;
+                    }
                 } else {
-                    return false;
+                    $query = $this->db->connect()->prepare("INSERT INTO users (name, last_name, passport, email, pass, hash, photo, user_type_id) VALUES(:name, :last_name, :passport, :email, :pass, :hash, :photo, :typeUser)");
+                    if($query->execute(array(':name'=>$name, ':last_name'=>$last_name, ':passport'=>$passport, ':email'=>$email, ':pass'=>$pass, ':hash'=>$hash, ':photo'=> $photo, ':typeUser'=>$typeUser)) == true){
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
+
             } catch(PDOException $e){
                 echo $e->getMessage();
                 return NULL;
@@ -280,31 +289,6 @@
                 return NULL;
             }
         }
-        function userCourses($userId){
-            try {
-                $query = $this->db->connect()->prepare("SELECT * FROM user_course JOIN courses ON user_course.course_id = courses.course_id WHERE user_course.user_id = '".$userId."';");
-                $query->execute();
-                $returnQuery = array();
-
-                if($query->rowCount() > 0){
-                    while($row = $query->fetch()){
-                        $test = $this->getTestForCourse($row['course_id']);
-                        $students = $this->coursesUser($row['course_id']);
-                        $creator = $this->getUserById( $row['user_create']);
-                        $course = new Course($row['course_id'], $row['course_name'], $row['course_description'], $row['course_folder'], $creator, $test, $row['course_img'], $row['date_create'], $students, $row['open'], $row['hash']);
-                    $returnQuery[]= $course;
-                    }
-                    return $returnQuery;
-                } else {
-                    return NULL;
-                }
-
-                $query->close();
-            } catch(PDOException $e){
-                echo $e->getMessage();
-                return NULL;
-            }
-        }
 
         function coursesUser($courseId){
             try {
@@ -393,7 +377,11 @@
             try{
                 $query = $this->db->connect()->prepare("INSERT INTO courses (course_name, course_description, course_folder, hash, course_img, user_create, date_create) VALUES(:course_name, :course_description, :course_folder, :hash, :course_img, :user_create, :date_create)");
                 if($query->execute(array(":course_img"=>$course_img, ":course_name" => $course_name,"course_description" => $course_description, ":hash"=> $hash, ":course_folder" =>$course_folder, ":user_create"=> $user_create, ":date_create"=>$date_create)) == true){
-                    //Create Course directory
+
+                    //If CoursesFolder doesn't exist, we create it and then Create Course directory
+                    if(!file_exists("CoursesFolder")){
+                        mkdir('./CoursesFolder', 0777, true);
+                    }
                      if(!mkdir($course_folder, 0777)){
                         return "ERROR, Failed to create course directory";
                     }
@@ -525,6 +513,61 @@
             } catch(PDOException $e){
                 echo $e->getMessage();
                 return NULL;
+            }
+        }
+
+        //MIGUEL ---------------------------------------------------------------------------
+        function generateTeacherCode($random_code){
+            $date = date("Y-m-d H:i:s");
+            $date = strtotime("+30 minute", strtotime($date));
+            $date = date("Y-m-d H:i:s", $date);
+
+            $query = $this->db->connect()->prepare("INSERT INTO code_create_teacher (code, date_end) VALUES(?,?)");
+            if($query->execute([$random_code, $date])){
+                return $random_code;
+            }
+            return false;
+        }
+        function getValidCode($code){
+            try {
+                $query = $this->db->connect()->prepare("SELECT * FROM code_create_teacher WHERE code = :code");
+                $query->execute(array(':code'=> $code));
+                if($query->rowCount() == 1){
+                    while($row = $query->fetch()){
+                        if($row['used'] == 1){
+                            return "The code was already used ";
+                        }
+                        $dateCode = date($row['date_end']);
+                        $dateNow = date("Y-m-d H:i:s");
+
+                        if($dateNow > $dateCode){
+                            return "The code has expired";
+                        }
+                        return true;
+                    }
+                    return "Error to check the code";
+                } else {
+                    return "The code doesn't exist";
+                }
+            } catch(PDOException $e){
+                echo $e->getMessage();
+                return false;
+            }
+        }
+
+        function setUsedCode($code){
+            try {
+                $query = $this->db->connect()->prepare("UPDATE code_create_teacher SET used = 1 WHERE code = :code");
+                $query->execute(array(':code'=> $code));
+                if($query->rowCount() == 1){
+                    return true;
+                } else {
+                    return false;
+                }
+
+            } catch(PDOException $e){
+                echo $e->getMessage();
+                return false;
             }
         }
 

@@ -11,7 +11,7 @@
                 <i class="fa fa-bars"></i>
             </button>
 
-                            <!-- Logo UML -->
+            <!-- Logo UML -->
 
             <div class="row">
                 <a title="Logo de Empresa para enlazar con la web principal" href="https://www.ultraligeromadrid.es" class="mt-2 navbar-brand">
@@ -20,7 +20,7 @@
                             <img src="https://www.ultraligeromadrid.es/assets/img/main-icon.webp" alt="Logo Empresa" title="Logo Empresa" width="140" height="70"/>
                         </div>
                         <div class="col-ms-1 logo-empresa" style="float: right; padding-left: 100px; margin-top: -48px; font-style: italic; font-family: serif; color: #77302c;">
-                        <h4 class="font-weight-bold">U<span style="color: #c4a951;" >L</span>Madrid</h4>
+                            <h4 class="font-weight-bold">U<span style="color: #c4a951;" >L</span>Madrid</h4>
                         </div>
                     </div>
                 </a>

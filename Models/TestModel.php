@@ -451,7 +451,11 @@
             $query->execute();
             if($query->rowCount() == 1){
                 while ($row = $query->fetch()){
-                $test = unserialize($row['test_serialize']);
+                if(!is_null($row['test_serialize'])){
+                    $test = unserialize($row['test_serialize']);
+                } else {
+                    $test = "";
+                }
                 return $test;
                 }
             }

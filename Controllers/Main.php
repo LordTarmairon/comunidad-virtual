@@ -120,6 +120,11 @@
             $this->loadModel('admin');
             $hash = $_POST['hash'];
             $user = $this->admin->getUserByHash($hash);
+            if(!isset($user)){
+                $result = array( "status" => "ERROR", "message" => "The user doesn't exist on the DataBase. Hash reference: ".$hash );
+                echo json_encode($result);
+                return false;
+            }
             $location = $user->getPhoto();
             
             if(isset($_FILES['file']['name'])){
@@ -335,6 +340,12 @@
             setcookie("token", "", time()-1, "/");
             header("Location:".URL);
             exit();
+        }
+
+        function createTeacherAccount(){
+            $data['view'] = "create-teacher";
+            $data['title'] = "Create New Teacher";
+            $this->view->render($data);
         }
 
     }

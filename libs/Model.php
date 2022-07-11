@@ -15,6 +15,30 @@
             }
             return implode($pass); //turn the array into a string
         }
+
+        function userCourses($userId){
+            try {
+                $query = $this->db->connect()->prepare("SELECT * FROM user_course JOIN courses ON user_course.course_id = courses.course_id WHERE user_course.user_id = '".$userId."';");
+                $query->execute();
+                $returnQuery = array();
+                if($query->rowCount() > 0){
+                    while($row = $query->fetch()){
+                        $test = $this->getTestForCourse($row['course_id']);
+                        $students = $this->coursesUser($row['course_id']);
+                        $creator = $this->getUserById( $row['user_create']);
+                        $course = new Course($row['course_id'], $row['course_name'], $row['course_description'], $row['course_folder'], $creator, $test, $row['course_img'], $row['date_create'], $students, $row['open'], $row['hash']);
+                        $returnQuery[]= $course;
+                    }
+                    return $returnQuery;
+                } else {
+                    return NULL;
+                }
+            } catch(PDOException $e){
+                echo $e->getMessage();
+                return NULL;
+            }
+        }
+
         function getTestQuestions($test_id){
             try{
                 $query = $this->db->connect()->prepare("SELECT * FROM test_questions WHERE test_id='".$test_id."'");

@@ -42,7 +42,8 @@ Class App{
                 //We check if the method is ajax_login or ajax_forgot_pass if its true they can call teh method.
                 if( $url[1] != "ajax_login"){
                     //if the method is not a ajax_forgot_pass continue
-                    if($url[1] != "ajax_forgot_pass"){
+
+                    if($url[1] != "ajax_forgot_pass" && $url[1] != "createTeacherAccount" && $url[1] != "ajax_newTeacher"){
                         header("Location:".URL."main/login");
                         exit();
                     }

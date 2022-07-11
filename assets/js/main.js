@@ -11,6 +11,7 @@ $( document ).ready(function() {
         toastr.warning("You have exams with unassigned questions.")
     }
 
+    // Get Calendary Events
     function eventClouse(){
         $.ajax({
             type: "POST",
@@ -18,27 +19,30 @@ $( document ).ready(function() {
             responseType: "json",
             success: function(ev){
                 toastr.options = {"progressBar": true,  "timeOut": "10000",}
-                ev = JSON.parse(ev);
-                ev.forEach(element =>{
-                    var days = dates(element.start, strDate);
-                    switch(days){
-                        case -7:
-                            toastr["info"]("You have a Event with the name <b>"+element.title+"</b> in a week", "Event Soon");
-                        break;
-                        case -3:
-                            toastr["info"]("You have a Event with the name <b>"+element.title+"</b> in "+days+" days", "Event Soon");
-                        break;
-                        case -2:
-                            toastr["warning"]("You have a Event with the name <b>"+element.title+"</b> in "+days+" days", "Event Soon");
-                            break;
-                        case -1:
-                            toastr["warning"]("You have a Event with the name <b>"+element.title+"</b> in "+days+" day", "Event Soon");                        
-                            break;
-                        case 0:
-                            toastr["success"]("TODAY, You have a Event with the name <b>"+element.title+"</b>", "Event Soon");                        
-                        break;
-                    }
-                })
+                if(ev !== ""){
+                    ev = JSON.parse(ev);
+                    ev.forEach(element =>{
+                        var days = dates(element.start, strDate);
+                        switch(days){
+                            case -7:
+                                toastr["info"]("You have a Event with the name <b>"+element.title+"</b> in a week", "Event Soon");
+                                break;
+                            case -3:
+                                toastr["info"]("You have a Event with the name <b>"+element.title+"</b> in "+days+" days", "Event Soon");
+                                break;
+                            case -2:
+                                toastr["warning"]("You have a Event with the name <b>"+element.title+"</b> in "+days+" days", "Event Soon");
+                                break;
+                            case -1:
+                                toastr["warning"]("You have a Event with the name <b>"+element.title+"</b> in "+days+" day", "Event Soon");
+                                break;
+                            case 0:
+                                toastr["success"]("TODAY, You have a Event with the name <b>"+element.title+"</b>", "Event Soon");
+                                break;
+                        }
+                    })
+                }
+
             },
             error: function(ev){
                 console.log("error to get an Events" + ev);
@@ -58,6 +62,7 @@ $( document ).ready(function() {
          return days;
     }
 
+    //load Calendar
     function loadCalendar(){
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -117,6 +122,7 @@ $( document ).ready(function() {
       calendar.render();
     }
 
+    //Delete Calendar Event
     $("#dlt").on("click", function(ev){
         Swal.fire({
           title: 'Delete Event?',
@@ -158,6 +164,7 @@ $( document ).ready(function() {
         });    
     });
 
+    //Update Calendar Events
     $("#upd").on("click", function(ev){
         var name = $("#eventName").val();
         var date = $("#datec").val();
@@ -169,7 +176,6 @@ $( document ).ready(function() {
         if ($('#alD').is(':checked')) {
             allDay = 1;
         }
-
 
         if(date == '' || name == '' || dateEnd == '' || value ==''){
             Swal.fire(
@@ -207,6 +213,7 @@ $( document ).ready(function() {
         }
     });
 
+    //Create a new Calendar Event
     $("#crt").on("click", function(ev){
         var name = $("#eventName").val();
         var date = $("#datec").val();
@@ -273,6 +280,7 @@ $( document ).ready(function() {
         })
     });
 
+    //LOGIN USER
     $('#loginForm').submit(function (ev) {
         $.ajax({
             type: $('#loginForm').attr('method'), 
@@ -318,9 +326,8 @@ $( document ).ready(function() {
         return true;
     }
 
-    //Ajax for Create an User
+    //Ajax for Create a New User
     $('#create-user').submit(function (ev) {
-
         var fd = new FormData();
         var files = $('#photo')[0].files;
         ev.preventDefault();
@@ -369,6 +376,7 @@ $( document ).ready(function() {
     $('#update-user').submit(function (ev) {
         var fd = new FormData();
         var files = $('#photo')[0].files;
+        var url = $("#valido").val();
         ev.preventDefault();
         fd.append('file',files[0]);
         fd.append('name',$("#name").val());
@@ -378,7 +386,6 @@ $( document ).ready(function() {
         fd.append('email',$("#email").val());
         fd.append('pass',$("#pass").val());
         fd.append('hash',$('#update-user').attr('action'));
-
         // Check file selected or not
         if($("#c_pass").val() == $("#pass").val() && $("#c_pass").val() != ""){
             $.ajax({
@@ -848,6 +855,7 @@ $( document ).ready(function() {
          //SHOW OR HIDE THE BUTTONS IF YOU ARE OR YOU AREN'T LOGGIN ON ZOOM
          if(prevUrl == "https://zoom.us/"){
             $("#lz").hide();
+             printMeetings();
             $("#cm").show();
          } else {
             $("#cm").hide();
@@ -1350,5 +1358,48 @@ $( document ).ready(function() {
     });
 
 
+    //Create Teacher by Code ---------------------------------------------------------------------------
+    $("#createTeacherWithCode").on("click", function(ev){
+        ev.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: url+"AdminController/ajax_teacherCreate",
+            responseType: "json",
+            success: function(data){
+                data = JSON.parse(data);
+                console.log(data);
+                if(data.status == "200"){
+                    $("#showTeacherCode").text(data.message);
+                    $("#teacherCodeModal").modal('show');
+                } else {
+                    toastr.error(data.message);
+                }
+            }
+        });
+    });
+
+    $('#btn-newTeacher').on("click", function (ev) {
+        ev.preventDefault();
+        let url = $("#url").val();
+        if(!nif($("#passport").val())){
+            $("#passport").focus();
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url+"adminController/ajax_newTeacher",
+            responseType: "json",
+            data: {"name": $("#name").val(), "last_name": $("#last_name").val(), "passport": $("#passport").val(),"typeUser": 3, "email": $("#email").val(), "pass": $("#pass").val(), "code": $("#code").val() },
+        }).then(res=>{
+            res = JSON.parse(res);
+            if(res.status == "ERROR"){
+                toastr.error('An error has occurred the user has not been inserted '+res.message);
+            } else {
+                toastr.success('New User was created.');
+                $(location).attr('href',url);
+            }
+        })
+    });
 
 });//Document Read

@@ -52,13 +52,13 @@
                     <div class="col-md-6 m-auto">
                         <div class="form-group">
                             <label for="true_count">Count True Question *</label>
-                            <input id="true_count" type="number" min="0" value="1.00" name="true_count" class="form-control" placeholder="How much is a correct question?" data-error="question is required.">
+                            <input id="true_count" type="number" min="0.1" value="1.00" name="true_count" class="form-control" placeholder="How much is a correct question?" data-error="question is required." step=".01"/>
                         </div>
                     </div>
                     <div class="col-md-6 m-auto">
                         <div class="form-group">
                             <label for="wrong_discount">Discount Wrong Question *</label>
-                            <input id="wrong_discount" type="number" min="0" value="0" name="wrong_discount" class="form-control" placeholder="How many questions do the test have?" data-error="question is required.">
+                            <input id="wrong_discount" type="number" min="0" value="0" name="wrong_discount" class="form-control" placeholder="How many questions do the test have?" data-error="question is required." step=".01" />
                         </div>
                     </div>
                 </div>

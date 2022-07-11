@@ -318,7 +318,6 @@
                 if(empty($photo)){
                     $photo = $course->getImg();
                 }
-
                 $status = $this->admin->updateCourse($course_id, $photo, $course_name, $course_description, $students);
                 if($status !== true){
                     $result = $status;
@@ -354,7 +353,7 @@
         function comeBack(){
             $_SESSION['user'] = $_SESSION['user_view'];
             unset($_SESSION['user_view']);
-            header("Location:".URL);
+            header("Location:".URL."adminController/showUsers");
 
         }
 
@@ -363,17 +362,70 @@
             echo $this->admin->randomPassword();
         }
 
-        function generatePDF(){
-// Creación del objeto de la clase heredada
-            $pdf = new PDF();
-            $pdf->AliasNbPages();
-            $pdf->AddPage();
-            $pdf->SetFont('Times','',12);
-            for($i=1;$i<=40;$i++)
-                $pdf->Cell(0,10,'Imprimiendo línea número '.$i,0,1);
-            $pdf->Output();
+        //MIGUEL ---------------------------------------------------------------------------
+
+        function ajax_teacherCreate(){
+            $this->loadModel("admin");
+            $code = $this->admin->randomPassword();
+            $resultQuery = $this->admin->generateTeacherCode($code);
+            if($resultQuery === false){
+                $result = array( "status" => "ERROR", "message" => "You got an error to generate new Teacher Code" );
+                echo json_encode($result);
+                return false;
+            } else {
+                $result = array( "status" => "200", "message" => $resultQuery);
+                echo json_encode($result);
+                return true;
+            }
+
         }
 
+        function ajax_newTeacher(){
+            $this->loadModel("admin");
+            $passtports = $this->admin->getUsersPass();
+            $emails = $this->admin->getUsersEmail();
+            $code = $_POST['code'];
+            $codeStatus = $this->admin->getValidCode($code);
+            if($codeStatus !== true){
+                $result = array( "status" => "ERROR", "message" => $codeStatus );
+                echo json_encode($result);
+                return false;
+            }
+
+            if(in_array($_POST['passport'], $passtports)){
+                $result = array( "status" => "ERROR", "message" => "The DNI exist on the database" );
+                echo json_encode($result);
+                return false;
+            }
+
+            if(in_array($_POST['email'], $emails)){
+                $result = array( "status" => "ERROR", "message" => "The email exist on the Database" );
+                echo json_encode($result);
+                return false;
+            }
+
+            $location = "./assets/img/default.png";
+            $hash = md5(time());
+
+            $photo = $location;
+            $name = $_POST['name'];
+            $last_name = $_POST['last_name'];
+            $email = $_POST['email'];
+            $pass = md5($_POST['pass']);
+            $passport = $_POST['passport'];
+            $typeUser = $_POST['typeUser'];
+            $status = $this->admin->newUser($name, $last_name, $passport, $email, $pass, $hash, $photo, $typeUser, date("Y-m-d H:i:s"));
+            if($status !== true){
+                $result = array( "status" => "ERROR", "message" => "INSERT ERROR $status" );
+                echo json_encode($result);
+                return false;
+            } else {
+                $this->admin->setUsedCode($code);
+                $result = array( "status" => "success", "message" =>"Insert Ok" );
+                echo json_encode($result);
+                return true;
+            }
+        }
     }
 
 ?>
