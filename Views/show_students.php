@@ -10,7 +10,7 @@
               <tr>
                   <th>ID</th>
                   <th>Full Name</th>
-                  <th>Passport</th>
+                  <th>DNI</th>
                   <th>Email</th>
                   <th>User Type</th>
                   <th>Normal IP</th>
@@ -23,7 +23,7 @@
               <tr>
                   <th>ID</th>
                   <th>Full Name</th>
-                  <th>Passport</th>
+                  <th>DNI</th>
                   <th>Email</th>
                   <th>User Type</th>
                   <th>Normal IP</th>
@@ -60,30 +60,34 @@
                       echo ($user->getFirstTime() == "0000-00-00") ? "<td>Not Loggin yet </td>" : "<td>". $user->getFirstTime() ."</td>";
                       echo ($user->openAcount()) ? "<td> <span class='bg-success pl-lg-2 pr-lg-2 rounded text-light'>Open</span></td>" : "<td> <span class='bg-dark text-white pl-lg-2 pr-lg-2 rounded'>Closed</span> </td>";
                       echo "<td>";
-                      //This if compare if you are a teacher and the oder is an admin, or if exist user view and user to execute is yourself
+                      //This if compare if you are a teacher and the other is an admin, or if exist user view and user to execute is yourself
                       if(($_SESSION['user']->getUser_type_id() == 3 && $user->getUser_type_id() == "Admin") || (isset($_SESSION['user_view']) && $_SESSION['user']->getUser_Id() == $user->getUser_id())){
                           echo "<button  class='btn btn-primary btn-sm' title='Edit User' disabled> <span class='fa fa-edit'></span></button>";
                           echo "<button class='btn btn-danger btn-del btn-sm' title='Delete' disabled> <span class='fas fa-trash-alt'></span>";
+                            if($_SESSION['user']->getUser_type_id() == 3 && $user->getUser_id() === $_SESSION['user']->getUser_id()){
+                                if($user->openAcount()){
+                                    echo "<button class='btn btn-success btn-op btn-sm' title='Open and Closed Account' disabled> <span class='fa fa-lock-open'></span>";
 
-                          if($user->openAcount()){
-                              echo "<button class='btn btn-success btn-op btn-sm' title='Open and Closed Account' disabled> <span class='fa fa-lock-open'></span>";
+                                } else {
+                                    echo "<button class='btn btn-secondary btn-op btn-sm' title='Open and Closed Account' disabled> <span class='fa fa-lock'></span>";
+                                }
+                            }
 
-                          } else {
-                              echo "<button class='btn btn-secondary btn-op btn-sm' title='Open and Closed Account' disabled> <span class='fa fa-lock'></span>";
-                          }
                       } else {
                           echo "<a href='".URL."main/updateStudent/".$user->getHash()."' class='btn btn-primary btn-sm' data-id='".$user->getUser_id()."' title='Edit User'> <span class='fa fa-edit'></span></a>";
                           echo "<button class='btn btn-danger btn-del btn-sm' data-bs-toggle='modal' data-bs-target='#deleteUser' title='Delete' data-id='".$user->getUser_id()."'> <span class='fas fa-trash-alt'></span>";
-                          if($user->openAcount()){
-                              echo "<button class='btn btn-success btn-op btn-sm' title='Open and Closed Account' data-id='".$user->getUser_id()."'> <span class='fa fa-lock-open'></span>";
+                              if($user->openAcount()){
+                                  echo "<button class='btn btn-success btn-op btn-sm' title='Open and Closed Account' data-id='".$user->getUser_id()."'> <span class='fa fa-lock-open'></span>";
 
-                          } else {
-                              echo "<button class='btn btn-secondary btn-op btn-sm' title='Open and Closed Account' data-id='".$user->getUser_id()."'> <span class='fa fa-lock'></span>";
-                          }
+                              } else {
+                                  echo "<button class='btn btn-secondary btn-op btn-sm' title='Open and Closed Account' data-id='".$user->getUser_id()."'> <span class='fa fa-lock'></span>";
+                              }
                       }
 
-                      if(!isset($_SESSION['user_view'])){
-                          echo "</button><a class='btn btn-warning btn-sm' title='User View' href='".URL."AdminController/userView/".$user->getHash()."'><span class='fa fa-eye'></span></a>";
+                      if(!isset($_SESSION['user_view']) && $_SESSION['user']->getUser_id() != $user->getUser_id()){
+                          if(($_SESSION['user']->getUser_type_id() == 3 || $_SESSION['user']->getUser_type_id() == 2) && $user->getUser_type_id() != "Admin"){
+                              echo "</button><a class='btn btn-warning btn-sm' title='User View' href='".URL."AdminController/userView/".$user->getHash()."'><span class='fa fa-eye'></span></a>";
+                          }
                         }
                       echo "</td>";
                         echo "</tr>";

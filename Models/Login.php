@@ -66,33 +66,6 @@
             }
         }
 
-        function userCourses($userId){
-            try {
-                $query = $this->db->connect()->prepare("SELECT * FROM user_course JOIN courses ON user_course.course_id = courses.course_id WHERE user_course.user_id = '".$userId."';");
-                $query->execute();
-                $returnQuery = array();
-
-                if($query->rowCount() > 0){
-                    while($row = $query->fetch()){
-                        $test = "test_id";//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                        $students = $this->coursesUser($row['course_id']);
-                        $creator = $this->getUserById( $row['user_create']);
-
-                        $course = new Course($row['course_id'], $row['course_name'], $row['course_description'], $row['course_folder'], $creator, $test, $row['course_img'], $row['date_create'], $students, $row['open'], $row['hash']);
-                    $returnQuery[]= $course;
-                    }
-                    return $returnQuery;
-                } else {
-                    return NULL;
-                }
-
-                $query->close();
-            } catch(PDOException $e){
-                echo $e->getMessage();
-                return NULL;
-            }
-        }
-
         function getUsers(){
             try {
                 $query = $this->db->connect()->prepare("SELECT * FROM users");

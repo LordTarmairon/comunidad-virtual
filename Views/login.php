@@ -7,17 +7,13 @@
 				<input id="email" type="email" name="email" placeholder="Email" required />
 				<input id="pass" type="password" name="pass" placeholder="Password" required />
 				<input id="valid" type="hidden" name="valid" value="<?php echo URL; ?>"/>
-				<!-- <div class=" m-auto pl-5 pb-4 form-check">
-					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-					<label class="form-check-label" for="flexCheckDefault">
-						Remember me
-					</label>
-				</div> -->
 			</div> 
 			<input type="submit" id="btn-login" value="Login">
 		</form> 
-		<a href="#" data-bs-toggle='modal' data-bs-target="#fp">Forget Password<br> </a>
-	</div>
+		<a href="#" data-bs-toggle='modal' data-bs-target="#fp">Forget Password<br> </a><br>
+        <a href="<?php echo URL ?>Main/createTeacherAccount" class="btn btn-primary text-light">Create Teacher Account<br> </a>
+        <button id="bt">Try me</button>
+    </div>
 </main>
 
 

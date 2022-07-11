@@ -6,7 +6,7 @@
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
         <div class="sidebar-brand-icon rotate-n-15">
             <img style="width: 100%;"  src="<?php echo URL; ?>assets/img/main-icon.webp"
-            alt="...">
+                 alt="...">
         </div>
         <div class="sidebar-brand-text mx-3">ULM Admin </div>
     </a>
@@ -63,6 +63,13 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Options Students:</h6>
                 <a class="collapse-item" href="<?php echo URL;?>adminController/createStudent">New Student</a>
+                <?php
+                if($_SESSION['user']->getUser_type_id() === 2){
+                ?>
+                    <a class="collapse-item" href="#" id='createTeacherWithCode'>Teacher create themselves</a>
+                <?php
+                }
+                ?>
                 <a class="collapse-item" href="<?php echo URL;?>adminController/showUsers">View Students</a>
             </div>
         </div>
@@ -77,3 +84,21 @@
     </div>
 
 </ul>
+    <!-- MODAL FOR GET THE  TEACHER CODE -->
+    <div class="modal" id="teacherCodeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Teacher Code</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-justify">Share this code with the teacher so they can create their account. This code will only be valid for 30 minutes:</p>
+                    <h2 class="text-center" id="showTeacherCode"></h2>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -10,7 +10,6 @@ $(document).ready( function (){
         $(this).prop("checked", true);
         $(this).removeClass("check");
         $(this).addClass("unCheck");
-
     });
 
     $(document).on("click", ".unCheck", function (){

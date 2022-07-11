@@ -221,13 +221,144 @@
             $this->loadModel("testModel");
             $test = $this->testModel->getTestByHash($test_hash);
             $course = $this->admin->getCourseHash($course_hash);
-
+            $infoTest = $this->testModel->checkUserTest($test->getId(), $_SESSION['user']->getUser_id());
             //Check if the date end is okey or not
             if($test->getDateClose() < date("Y-m-d H:i:s")){
                 header("Location:".URL."CourseController/courseDashboard/".$course->getHash());
                 exit();
             }
 
+            //If the user use come back, this method send the test empty.
+            if($infoTest != false){
+                $dateEnd = date("Y-m-d H:i:s");
+                foreach($test->getQuestions() AS $question){
+                    switch ($question->getQuestionType()){
+                        case "simple":
+                            foreach($_POST AS $key => $value){
+                                if($question->getId() == $key){
+                                    $answer = $this->testModel->getAnswer($value);
+                                    $question->setStudentAnswer($answer);
+                                }
+                            }
+                            break;
+                        case "multiple":
+                            foreach($_POST AS $key => $value){
+
+                                if($question->getId() == $key){
+                                    $answers = array();
+                                    if(is_array($value)){
+                                        foreach($value AS $answer_id){
+                                            $answer = $this->testModel->getAnswer($answer_id);
+                                            array_push($answers, $answer);
+                                        }
+                                    } elseif($value == ""){
+                                        $answers = "";
+                                    }
+                                    $question->setStudentAnswer($answers);
+                                }
+                            }
+                            break;
+
+                        case "written":
+                            foreach($_POST AS $key => $value){
+                                if($question->getId() == $key){
+                                    $question->setStudentAnswer($value);
+                                }
+                            }
+                            break;
+                    }
+                }
+
+                //THIS CODE IS FOR GET THE SCORE
+                $trueCount = $test->getTrueCount();
+                $wrongDiscount = $test->getWrongDiscount();
+                $totalQuestions = $test->getTotalQuestions();
+                $getScore = 0;
+
+                foreach($test->getQuestions() AS $question){
+                    switch ($question->getQuestionType()){
+                        case "simple":
+                            if(!empty($question->getStudentAnswer())){
+                                if($question->getStudentAnswer()->isValue()){
+                                    $getScore += $trueCount;
+                                } else {
+                                    $getScore -= $wrongDiscount;
+                                }
+                            }
+                            break;
+                        case "multiple":
+                            //Comprobamos si la respuesta del usuario no es vacia
+                            if(!empty($question->getStudentAnswer())){
+                                $totalTrue = 0;
+                                $userTrue = 0;
+                                $userFalse = 0;
+
+                                //Recorremos las respuestas y obtenemos el numero de verdaderas
+                                foreach($question->getAnswers() AS $answer){
+                                    if($answer->isValue()){
+                                        $totalTrue++;
+                                    }
+                                }
+
+                                //Si el usuario respondio varias sacamos las respuestas del usuario que son
+                                //veradderas y las que son falsas
+                                if(is_array($question->getStudentAnswer())){
+                                    foreach($question->getStudentAnswer() AS $answer){
+                                        if($answer->isValue()){
+                                            $userTrue++;
+                                        } else {
+                                            $userFalse++;
+                                        }
+                                    }
+                                } else{
+                                    if($question->getStudentAnswer()->isValue()){
+                                        $userTrue++;
+                                    }
+                                }
+
+                                //Si las respuestas del user y las totales son iguales otorgamos punto entero
+                                //De lo contrario Restamos a las respuestas veradderas del usuario las falsas y
+                                //si las respuestas son 0 o menos restamos al score total lo correspondiente
+                                //Si es diferente o mayor a 0 es porque tiene alguna verdadera y sacamos la parte proporcional de su valor
+                                if($userTrue == $totalTrue && $userFalse == 0){
+                                    $getScore += $trueCount;
+                                } else {
+                                    $userTrue -= $userFalse;
+
+                                    if($userTrue > 0){
+                                        $getScore+= ($userTrue * $trueCount) / $totalTrue;
+                                    } else {
+                                        $getScore -= $wrongDiscount;
+                                    }
+                                }
+                            }
+                            break;
+                        case "written":
+                            if(!empty($question->getStudentAnswer()) || $question->getStudentAnswer() != NULL){
+                                $trueResult = str_replace(" ", "", $question->getResult()[0]->getText());
+                                $trueResult = strtolower($trueResult);
+                                $userResult = str_replace(" ", "", $question->getStudentAnswer());
+                                $userResult = strtolower($userResult);
+
+                                if($userResult == $trueResult){
+                                    $getScore += $trueCount;
+                                } else {
+                                    $getScore -= $wrongDiscount;
+                                }
+                            }
+                            break;
+                    }
+                }
+
+                $totalScore = $getScore * BASENOTE / ($trueCount*$totalQuestions);
+                $this->testModel->updateUserFinish($test->getId(), $_SESSION['user']->getUser_id(), $totalScore, $dateEnd);
+
+                $test->setUserTest($this->testModel->checkUserTest($test->getId(), $_SESSION['user']->getUser_id()));
+
+                $this->testModel->saveSerializeTest($test->getId(), $_SESSION['user']->getUser_id(), $test);
+                $newTest = $this->testModel->getSerializeTest($test->getId(), $_SESSION['user']->getUser_id());
+
+            }
 
             $data['breadcrumbs'] = $this->breadcrumbs .= "<a href='".URL."CourseController/courseDashboard/".$course->getHash()."' title='Course Dashboard'> ".$course->getName()."</a> "." / ". $test->getName() ." /";
             $data['test'] = $test;
@@ -305,7 +436,10 @@
         function processTest(){
             $this->loadModel("testModel");
             $dateEnd = date("Y-m-d H:i:s");
+
             $test = $this->testModel->getTestByHash($_POST['test_hash']);
+
+
             foreach($test->getQuestions() AS $question){
                 switch ($question->getQuestionType()){
                     case "simple":
@@ -445,6 +579,7 @@
             $course = $this->admin->getCourseHash($course_hash);
             $test = $this->testModel->getTestByHash($test_hash);
             $user = $this->admin->getUserByHash($user_hash);
+
             $resultTest = $this->testModel->getSerializeTest($test->getId(), $user->getUser_id());
 
             $data['breadcrumbs'] = $this->breadcrumbs .= "<a href='".URL."CourseController/courseDashboard/".$course->getHash()."' title='Course Dashboard'> ".$course->getName()."</a> "." / ". $test->getName() ." Review /";

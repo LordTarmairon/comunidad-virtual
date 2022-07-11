@@ -18,6 +18,13 @@ Class CourseController extends Controller{
         if($course->getOpen() == 0 && !$this->infoAdmin() && $course->getUser_create()->getUser_id() != $_SESSION['user']->getUser_id()){
             header("Location:".URL);
         }
+
+        //if the folder doesn't exist we redirect to user at error 404
+        if(!file_exists($course->getFolder())){
+            $this->error(404);
+            exit();
+        }
+
         $files = scandir($course->getFolder());
         $realFiles = array();
         $dots = array("..", ".");
@@ -46,6 +53,11 @@ Class CourseController extends Controller{
             exit();
         }
 
+        //if the folder doesn't exist we redirect to user at error 404
+        if(!file_exists($course->getFolder())){
+            $this->error(404);
+            exit();
+        }
         $files = scandir($course->getFolder());
         $realFiles = array();
         $dots = array("..", ".");
