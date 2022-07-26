@@ -12,7 +12,6 @@
 		</form> 
 		<a href="#" data-bs-toggle='modal' data-bs-target="#fp">Forget Password<br> </a><br>
         <a href="<?php echo URL ?>Main/createTeacherAccount" class="btn btn-primary text-light">Create Teacher Account<br> </a>
-        <button id="bt">Try me</button>
     </div>
 </main>
 
